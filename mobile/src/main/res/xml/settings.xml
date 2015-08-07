@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/group_title_feed">
+
+        <ListPreference
+            android:defaultValue="@string/type_value_featured"
+            android:entries="@array/type_names"
+            android:entryValues="@array/type_values"
+            android:key="@string/key_type"
+            android:title="@string/preference_title_type"
+            android:summary="%s"/>
+
+        <technology.mainthread.apps.grandmaps.settings.RefreshDialogPreference
+            android:defaultValue="@integer/default_refresh_frequency"
+            android:dialogLayout="@layout/refresh_dialog"
+            android:key="@string/key_frequency"
+            android:title="@string/preference_title_frequency" />
+
+        <CheckBoxPreference
+            android:key="@string/key_wifi"
+            android:title="@string/title_wifi"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/group_title_developer">
+
+        <PreferenceScreen
+            android:key="@string/key_feedback"
+            android:title="@string/feedback_title">
+            <intent
+                android:action="android.intent.action.SENDTO"
+                android:data="mailto:hello@mainthread.technology">
+                <extra
+                    android:name="android.intent.extra.SUBJECT"
+                    android:value="@string/intent_feedback_subject" />
+            </intent>
+        </PreferenceScreen>
+
+        <PreferenceScreen android:title="@string/title_other_apps">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="market://search?q=pub:MainThread+Technology" />
+        </PreferenceScreen>
+
+        <Preference
+            android:key="@string/key_os_licences"
+            android:title="@string/title_os_licences" />
+
+        <Preference
+            android:key="@string/key_build_number"
+            android:title="@string/version_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App Strings -->
+    <string name="app_name">Grand Maps</string>
+    <string name="source_description">For the cartographer in you</string>
+
+    <string name="action_share">Share</string>
+    <string name="error_no_map_to_share">There isn\'t a map to share!</string>
+    <string name="share_intent_title">Share Map</string>
+    <string name="share_intent_extra_text">"My Android wallpaper today is '%1$s' by %2$s. #MuzeiGrandMaps %3$s"</string>
+
+    <!--Settings-->
+    <string name="settings_activity_title">Settings</string>
+    <!-- Settings source group -->
+    <string name="key_type">setting_update_type</string>
+    <string name="key_frequency">setting_refresh_frequency</string>
+    <string name="key_client_id">client_id</string>
+
+    <!-- Source type -->
+    <string name="group_title_feed">Source</string>
+    <string name="preference_title_type">Source</string>
+
+    <string-array name="type_names">
+        <item>Daily Featured</item>
+        <item>Random</item>
+    </string-array>
+
+    <string name="type_value_featured">TYPE_FEATURED</string>
+    <string name="type_value_random">TYPE_RANDOM</string>
+
+    <string-array name="type_values">
+        <item>@string/type_value_featured</item>
+        <item>@string/type_value_random</item>
+    </string-array>
+
+    <!-- refresh time -->
+    <string name="preference_title_frequency">Refresh Period</string>
+
+    <plurals name="refresh_frequency_summary">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+
+    <!-- wifi -->
+    <string name="key_wifi">key_wifi</string>
+    <string name="title_wifi">Refresh only on wifi</string>
+
+    <!-- Settings Developer -->
+    <string name="group_title_developer">Developer</string>
+    <string name="key_build_number">setting_build_number</string>
+    <string name="key_feedback">setting_feedback</string>
+    <string name="feedback_title">Contact developer</string>
+    <string name="title_other_apps">Other apps</string>
+    <string name="version_title">Version</string>
+    <string name="key_os_licences">key_os_licences</string>
+    <string name="title_os_licences">Open source licences</string>
+
+    <!-- dialog -->
+    <string name="dialog_refresh_unit">Hours</string>
+
+    <!-- Email -->
+    <string name="intent_feedback_subject">Grand Maps for Muzei Feedback</string>
+
+    <!-- Errors -->
+    <string name="version_name_error">Cannot find version name</string>
+
+</resources>
