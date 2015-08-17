@@ -21,7 +21,7 @@ Grand Maps for Muzei is a cartography themed extension for the Muzei live-wallpa
 License
 -------
 
-    Copyright 2015 Main Thread Technology
+    Copyright 2015 Andrew Jack and Samuel Parkinson
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
