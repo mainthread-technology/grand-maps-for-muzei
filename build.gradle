@@ -55,10 +55,10 @@ subprojects {
         versionPatch = 0
         versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
-        buildTools = "22.0.1"
-        compileAndTargetSdkLevel = 22
+        buildTools = "23.0.0"
+        compileAndTargetSdkLevel = 23
         minSdkLevel = 17
-        commonSupportLibraryVersion = '22.2.1'
+        commonSupportLibraryVersion = '23.0.0'
         daggerVersion = '2.0.1'
     }
 }
