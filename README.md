@@ -4,7 +4,7 @@
 Grand Maps for Muzei is a cartography themed extension for the Muzei live-wallpaper.
 
 ## Beta testing
-[Join](https://play.google.com/apps/testing/technology.mainthread.apps.grandmaps) our the beta testing to be the first to see updates.
+[Join](https://play.google.com/apps/testing/technology.mainthread.apps.grandmaps) the open beta to be the first to see updates.
 
 ## Features ##
 * A featured cartography themed wallpaper every day!
