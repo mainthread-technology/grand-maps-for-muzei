@@ -1,5 +1,5 @@
 # Grand Maps for Muzei
-[![Build Status](https://travis-ci.org/mainthread-technology/grand-maps-for-muzei.svg?branch=master)](https://travis-ci.org/mainthread-technology/grand-maps-for-muzei) [![Circle CI](https://circleci.com/gh/mainthread-technology/grand-maps-for-muzei.svg?style=svg)](https://circleci.com/gh/mainthread-technology/grand-maps-for-muzei)
+[![Circle CI](https://circleci.com/gh/mainthread-technology/grand-maps-for-muzei.svg?style=svg)](https://circleci.com/gh/mainthread-technology/grand-maps-for-muzei)
 
 Grand Maps for Muzei is a cartography themed extension for the Muzei live-wallpaper.
 
