@@ -1,6 +1,5 @@
 package technology.mainthread.apps.grandmaps.settings;
 
-
 import android.app.Fragment;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

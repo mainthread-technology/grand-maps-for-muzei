@@ -26,9 +26,9 @@ public class GrandMapsApiModule {
     GrandMapsApi provideGrandMapsService(final GrandMapsPreferences preferences) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(resources.getString(R.string.api_endpoint))
-                .setLogLevel(BuildConfig.DEBUG ?
-                        RestAdapter.LogLevel.FULL :
-                        RestAdapter.LogLevel.NONE)
+                .setLogLevel(BuildConfig.DEBUG
+                        ? RestAdapter.LogLevel.FULL
+                        : RestAdapter.LogLevel.NONE)
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade request) {

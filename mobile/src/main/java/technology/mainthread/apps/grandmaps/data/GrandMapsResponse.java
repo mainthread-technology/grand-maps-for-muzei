@@ -1,40 +1,49 @@
 package technology.mainthread.apps.grandmaps.data;
 
+import com.google.gson.annotations.SerializedName;
+
 public class GrandMapsResponse {
 
-    private String Id;
-    private String Title;
-    private String Author;
-    private int Year;
-    private String ImageAddress;
-    private String ReferenceAddress;
-    private long NextUpdate;
+    @SerializedName("Id")
+    private String id;
+    @SerializedName("Title")
+    private String title;
+    @SerializedName("Author")
+    private String author;
+    @SerializedName("Year")
+    private int year;
+    @SerializedName("ImageAddress")
+    private String imageAddress;
+    @SerializedName("ReferenceAddress")
+    private String referenceAddress;
+    @SerializedName("NextUpdate")
+    private long nextUpdate;
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public int getYear() {
-        return Year;
+        return year;
     }
 
     public String getImageAddress() {
-        return ImageAddress;
+        return imageAddress;
     }
 
     public String getReferenceAddress() {
-        return ReferenceAddress;
+        return referenceAddress;
     }
 
     public long getNextUpdate() {
-        return NextUpdate;
+        return nextUpdate;
     }
 }

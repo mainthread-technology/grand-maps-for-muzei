@@ -70,3 +70,5 @@ dependencies {
         transitive = true;
     }
 }
+
+apply from: '../config/static-analysis.gradle'
