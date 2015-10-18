@@ -58,7 +58,7 @@ subprojects {
         buildTools = "23.0.1"
         compileAndTargetSdkLevel = 23
         minSdkLevel = 17
-        commonSupportLibraryVersion = '23.0.1'
+        commonSupportLibraryVersion = '23.1.0'
         daggerVersion = '2.0.1'
     }
 }
