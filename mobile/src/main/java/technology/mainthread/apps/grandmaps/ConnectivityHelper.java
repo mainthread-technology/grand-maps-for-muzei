@@ -15,7 +15,9 @@ public class ConnectivityHelper {
     }
 
     public boolean isConnectedToWifi() {
-        NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        return networkInfo.isConnected();
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null
+                && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI
+                && activeNetwork.isConnected();
     }
 }
