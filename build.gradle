@@ -55,7 +55,7 @@ subprojects {
         versionPatch = 0
         versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
-        buildTools = "23.0.1"
+        buildTools = "23.0.2"
         compileAndTargetSdkLevel = 23
         minSdkLevel = 17
         commonSupportLibraryVersion = '23.1.0'

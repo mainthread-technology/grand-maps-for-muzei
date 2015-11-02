@@ -62,7 +62,7 @@ dependencies {
 
     compile "com.google.android.apps.muzei:muzei-api:2.0"
     compile "com.squareup.retrofit:retrofit:1.9.0"
-    compile "com.jakewharton.timber:timber:3.1.0"
+    compile "com.jakewharton.timber:timber:4.1.0"
     compile('de.psdev.licensesdialog:licensesdialog:1.8.0') {
         exclude module: 'support-v4'
     }
