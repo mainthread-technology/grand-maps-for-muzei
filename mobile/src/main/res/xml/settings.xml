@@ -12,9 +12,10 @@
             android:title="@string/preference_title_type"
             android:summary="%s"/>
 
-        <technology.mainthread.apps.grandmaps.settings.RefreshDialogPreference
-            android:defaultValue="@integer/default_refresh_frequency"
-            android:dialogLayout="@layout/refresh_dialog"
+        <ListPreference
+            android:defaultValue="@string/default_refresh_frequency"
+            android:entries="@array/frequency_names"
+            android:entryValues="@array/frequency_values"
             android:key="@string/key_frequency"
             android:title="@string/preference_title_frequency" />
 

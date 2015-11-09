@@ -25,11 +25,11 @@ public class SettingsFragment extends PreferenceFragment {
     private final Preference.OnPreferenceChangeListener frequencyPrefChangedListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            onFrequencyPreferenceChanged(preference, (Integer) newValue);
+            onFrequencyPreferenceChanged(preference, (String) newValue);
             return true;
         }
     };
-    private RefreshDialogPreference frequencyPref;
+    private ListPreference frequencyPref;
 
     public static Fragment newInstance() {
         return new SettingsFragment();
@@ -43,7 +43,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void initializePreferences() {
-        frequencyPref = (RefreshDialogPreference) findPreference(getResources().getString(R.string.key_frequency));
+        frequencyPref = (ListPreference) findPreference(getResources().getString(R.string.key_frequency));
         ListPreference typePref = (ListPreference) findPreference(getResources().getString(R.string.key_type));
 
         onTypePreferenceChanged(typePref.getValue());
@@ -76,8 +76,9 @@ public class SettingsFragment extends PreferenceFragment {
         frequencyPref.setEnabled(!newValue.equals(RefreshType.TYPE_FEATURED.name()));
     }
 
-    private void onFrequencyPreferenceChanged(Preference preference, int newValue) {
-        preference.setSummary(getResources().getQuantityString(R.plurals.refresh_frequency_summary, newValue, newValue));
+    private void onFrequencyPreferenceChanged(Preference preference, String newValue) {
+        int frequency = Integer.parseInt(newValue);
+        preference.setSummary(getResources().getQuantityString(R.plurals.refresh_frequency_summary, frequency, frequency));
     }
 
     private void showLicencesDialog() {
