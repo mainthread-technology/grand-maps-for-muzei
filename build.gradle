@@ -50,6 +50,7 @@ subprojects {
             }
         }
 
+        // key store properties
         def Properties localProps = new Properties()
         File localPropsFile = file('../local.properties')
         if (localPropsFile.exists()) {
