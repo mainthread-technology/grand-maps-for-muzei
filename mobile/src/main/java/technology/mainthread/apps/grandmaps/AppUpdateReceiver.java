@@ -26,11 +26,11 @@ public class AppUpdateReceiver extends BroadcastReceiver {
         if (preferences.contains(keyFrequency)) {
             Map<String, ?> keys = preferences.getAll();
 
-            // Convert frequency preference value to string
             for (Map.Entry<String, ?> entry : keys.entrySet()) {
-
                 if (entry.getKey().equals(keyFrequency)
                         && entry.getValue().getClass().equals(Integer.class)) {
+
+                    // Convert frequency preference value to string
                     int value = (Integer) entry.getValue();
                     preferences.edit()
                             .remove(keyFrequency)
