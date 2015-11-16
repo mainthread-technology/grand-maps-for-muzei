@@ -72,9 +72,6 @@
     <string name="key_os_licences">key_os_licences</string>
     <string name="title_os_licences">Open source licences</string>
 
-    <!-- dialog -->
-    <string name="dialog_refresh_unit">Hours</string>
-
     <!-- Email -->
     <string name="intent_feedback_subject">Grand Maps for Muzei Feedback</string>
 
