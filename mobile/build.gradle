@@ -51,7 +51,7 @@ dependencies {
     apt "com.google.dagger:dagger-compiler:${daggerVersion}"
     provided "org.glassfish:javax.annotation:10.0-b28"
 
-    compile "com.android.support:appcompat-v7:${commonSupportLibraryVersion}"
+    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
 
     compile "com.google.android.apps.muzei:muzei-api:2.0"
     compile "com.squareup.retrofit:retrofit:1.9.0"
