@@ -8,4 +8,6 @@ public interface GrandMapsGraph {
     void inject(GrandMapsArtSource grandMapsArtSource);
 
     void inject(SettingsActivity settingsActivity);
+
+    void inject(AppUpdateReceiver appUpdateReceiver);
 }
