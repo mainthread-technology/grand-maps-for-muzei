@@ -73,3 +73,12 @@ subprojects {
         daggerVersion = '2.0.2'
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.9'
+}
+
+task clean(type: Delete) {
+    group 'build'
+    delete rootProject.buildDir
+}
