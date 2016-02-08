@@ -1,9 +1,9 @@
-package technology.mainthread.apps.grandmaps;
+package technology.mainthread.apps.grandmaps.injector;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
-import technology.mainthread.apps.grandmaps.data.GrandMapsApiModule;
+import technology.mainthread.apps.grandmaps.GrandMapsApp;
 
 @Singleton
 @Component(modules = {GrandMapsAppModule.class, GrandMapsApiModule.class})

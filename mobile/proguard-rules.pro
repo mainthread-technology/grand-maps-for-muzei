@@ -1,14 +1,14 @@
 # Retrofit, OkHttp, Gson
 -keepattributes *Annotation*
 -keepattributes Signature
--keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
--dontwarn com.squareup.okhttp.**
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
 -dontwarn rx.**
--dontwarn retrofit.**
--keep class retrofit.** { *; }
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
 -keepclasseswithmembers class * {
-    @retrofit.http.* <methods>;
+    @retrofit2.http.* <methods>;
 }
 -keep class sun.misc.Unsafe { *; }
 -dontwarn java.nio.file.*

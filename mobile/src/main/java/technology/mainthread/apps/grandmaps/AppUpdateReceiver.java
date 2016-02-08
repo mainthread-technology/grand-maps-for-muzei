@@ -18,25 +18,27 @@ public class AppUpdateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        GrandMapsApp.get(context).inject(this);
+        if (Intent.ACTION_PACKAGE_REPLACED.equals(intent.getAction())) {
+            GrandMapsApp.get(context).inject(this);
 
-        Timber.d("On app updated");
+            Timber.d("On app updated");
 
-        String keyFrequency = context.getResources().getString(R.string.key_frequency);
-        if (preferences.contains(keyFrequency)) {
-            Map<String, ?> keys = preferences.getAll();
+            String keyFrequency = context.getResources().getString(R.string.key_frequency);
+            if (preferences.contains(keyFrequency)) {
+                Map<String, ?> keys = preferences.getAll();
 
-            for (Map.Entry<String, ?> entry : keys.entrySet()) {
-                if (entry.getKey().equals(keyFrequency)
-                        && entry.getValue().getClass().equals(Integer.class)) {
+                for (Map.Entry<String, ?> entry : keys.entrySet()) {
+                    if (entry.getKey().equals(keyFrequency)
+                            && entry.getValue().getClass().equals(Integer.class)) {
 
-                    // Convert frequency preference value to string
-                    int value = (Integer) entry.getValue();
-                    preferences.edit()
-                            .remove(keyFrequency)
-                            .putString(keyFrequency, Integer.toString(value))
-                            .commit();
-                    break;
+                        // Convert frequency preference value to string
+                        int value = (Integer) entry.getValue();
+                        preferences.edit()
+                                .remove(keyFrequency)
+                                .putString(keyFrequency, Integer.toString(value))
+                                .apply();
+                        break;
+                    }
                 }
             }
         }
