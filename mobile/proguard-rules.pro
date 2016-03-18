@@ -1,6 +1,7 @@
 # Retrofit, OkHttp, Gson
 -keepattributes *Annotation*
 -keepattributes Signature
+-keepattributes Exceptions
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**

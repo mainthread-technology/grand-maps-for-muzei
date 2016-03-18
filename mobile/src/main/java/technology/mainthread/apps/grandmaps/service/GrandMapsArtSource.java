@@ -11,6 +11,7 @@ import com.google.android.apps.muzei.api.Artwork;
 import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
 import com.google.android.apps.muzei.api.UserCommand;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,38 +120,44 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
 
         String currentToken = (getCurrentArtwork() != null) ? getCurrentArtwork().getToken() : "";
 
-        Response<GrandMapsResponse> response = null;
-        switch (preferences.getRefreshType()) {
-            case TYPE_FEATURED:
-                response = grandMapsApi.getFeatured();
-                break;
-            case TYPE_RANDOM:
-                response = grandMapsApi.getRandom(currentToken);
-                break;
-        }
-        if (response.isSuccessful()) {
-            GrandMapsResponse responseBody = response.body();
-            if (responseBody == null || responseBody.getImageAddress() == null) {
-                throw new RetryException();
+        try {
+            Response<GrandMapsResponse> response = null;
+            switch (preferences.getRefreshType()) {
+                case TYPE_FEATURED:
+                    response = grandMapsApi.getFeatured().execute();
+                    break;
+                case TYPE_RANDOM:
+                    response = grandMapsApi.getRandom(currentToken).execute();
+                    break;
             }
 
-            publishArtwork(new Artwork.Builder()
-                    .title(responseBody.getTitle())
-                    .byline(String.format(Locale.ENGLISH, "%s, %d", responseBody.getAuthor(), responseBody.getYear()))
-                    .token(responseBody.getId())
-                    .imageUri(Uri.parse(responseBody.getImageAddress()))
-                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(responseBody.getReferenceAddress())))
-                    .build());
+            if (response.isSuccessful()) {
+                GrandMapsResponse responseBody = response.body();
+                if (responseBody == null || responseBody.getImageAddress() == null) {
+                    throw new RetryException();
+                }
 
-            scheduleNext(responseBody.getNextUpdate() * 1000L);
-        } else {
-            // If server error then retry
-            int statusCode = response.code();
-            if (500 <= statusCode && statusCode < 600) {
-                Timber.w("Network error, code: %d, message: %s", response.code(), response.message());
-                throw new RetryException();
+                publishArtwork(new Artwork.Builder()
+                        .title(responseBody.getTitle())
+                        .byline(String.format(Locale.ENGLISH, "%s, %d", responseBody.getAuthor(), responseBody.getYear()))
+                        .token(responseBody.getId())
+                        .imageUri(Uri.parse(responseBody.getImageAddress()))
+                        .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(responseBody.getReferenceAddress())))
+                        .build());
+
+                scheduleNext(responseBody.getNextUpdate() * 1000L);
+            } else {
+                // If server error then retry
+                int statusCode = response.code();
+                if (500 <= statusCode && statusCode < 600) {
+                    Timber.w("Network error, code: %d, message: %s", response.code(), response.message());
+                    throw new RetryException();
+                }
+
+                Timber.d("Wallpaper update failed, retrying in %d minutes", MAX_JITTER_MILLIS * 2 / (60 * 1000));
+                scheduleUpdate(System.currentTimeMillis() + MAX_JITTER_MILLIS * 2);
             }
-
+        } catch (IOException e) {
             Timber.d("Wallpaper update failed, retrying in %d minutes", MAX_JITTER_MILLIS * 2 / (60 * 1000));
             scheduleUpdate(System.currentTimeMillis() + MAX_JITTER_MILLIS * 2);
         }

@@ -14,6 +14,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import technology.mainthread.apps.grandmaps.BuildConfig;
 import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
@@ -56,6 +57,7 @@ public class GrandMapsApiModule {
     @Singleton
     GrandMapsApi provideGrandMapsService(OkHttpClient okHttpClient) {
         Retrofit restAdapter = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(resources.getString(R.string.api_endpoint))
                 .client(okHttpClient)
                 .build();
