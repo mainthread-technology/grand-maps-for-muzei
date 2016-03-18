@@ -1,14 +1,15 @@
 package technology.mainthread.apps.grandmaps.data;
 
-import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit2.Response;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface GrandMapsApi {
 
     @GET("/v1/maps/featured")
-    GrandMapsResponse getFeatured();
+    Response<GrandMapsResponse> getFeatured();
 
     @GET("/v1/maps/random/{id}")
-    GrandMapsResponse getRandom(@Path("id") String id);
+    Response<GrandMapsResponse> getRandom(@Path("id") String id);
 
 }

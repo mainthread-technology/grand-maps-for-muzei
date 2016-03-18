@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps;
+package technology.mainthread.apps.grandmaps.injector;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import technology.mainthread.apps.grandmaps.GrandMapsApp;
 
 @Module
 public class GrandMapsAppModule {

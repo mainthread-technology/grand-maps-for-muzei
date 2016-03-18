@@ -20,7 +20,7 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import retrofit.RetrofitError;
+import retrofit2.Response;
 import technology.mainthread.apps.grandmaps.BuildConfig;
 import technology.mainthread.apps.grandmaps.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.GrandMapsApp;
@@ -119,42 +119,41 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
 
         String currentToken = (getCurrentArtwork() != null) ? getCurrentArtwork().getToken() : "";
 
-        GrandMapsResponse response = null;
-        try {
-            switch (preferences.getRefreshType()) {
-                case TYPE_FEATURED:
-                    response = grandMapsApi.getFeatured();
-                    break;
-                case TYPE_RANDOM:
-                    response = grandMapsApi.getRandom(currentToken);
-                    break;
+        Response<GrandMapsResponse> response = null;
+        switch (preferences.getRefreshType()) {
+            case TYPE_FEATURED:
+                response = grandMapsApi.getFeatured();
+                break;
+            case TYPE_RANDOM:
+                response = grandMapsApi.getRandom(currentToken);
+                break;
+        }
+        if (response.isSuccessful()) {
+            GrandMapsResponse responseBody = response.body();
+            if (responseBody == null || responseBody.getImageAddress() == null) {
+                throw new RetryException();
             }
-        } catch (RetrofitError error) {
-            if (error.getResponse() != null) {
-                int statusCode = error.getResponse().getStatus();
-                if (error.getKind() == RetrofitError.Kind.NETWORK
-                        || (500 <= statusCode && statusCode < 600)) {
-                    Timber.e(error, "server error");
-                    throw new RetryException(error);
-                }
+
+            publishArtwork(new Artwork.Builder()
+                    .title(responseBody.getTitle())
+                    .byline(String.format(Locale.ENGLISH, "%s, %d", responseBody.getAuthor(), responseBody.getYear()))
+                    .token(responseBody.getId())
+                    .imageUri(Uri.parse(responseBody.getImageAddress()))
+                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(responseBody.getReferenceAddress())))
+                    .build());
+
+            scheduleNext(responseBody.getNextUpdate() * 1000L);
+        } else {
+            // If server error then retry
+            int statusCode = response.code();
+            if (500 <= statusCode && statusCode < 600) {
+                Timber.w("Network error, code: %d, message: %s", response.code(), response.message());
+                throw new RetryException();
             }
+
             Timber.d("Wallpaper update failed, retrying in %d minutes", MAX_JITTER_MILLIS * 2 / (60 * 1000));
             scheduleUpdate(System.currentTimeMillis() + MAX_JITTER_MILLIS * 2);
         }
-
-        if (response == null || response.getImageAddress() == null) {
-            throw new RetryException();
-        }
-
-        publishArtwork(new Artwork.Builder()
-                .title(response.getTitle())
-                .byline(String.format("%s, %d", response.getAuthor(), response.getYear()))
-                .token(response.getId())
-                .imageUri(Uri.parse(response.getImageAddress()))
-                .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(response.getReferenceAddress())))
-                .build());
-
-        scheduleNext(response.getNextUpdate() * 1000L);
 
     }
 
