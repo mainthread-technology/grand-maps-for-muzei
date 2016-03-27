@@ -11,6 +11,9 @@ android {
         targetSdkVersion compileAndTargetSdkLevel
         versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        resValue 'string', 'api_endpoint', apiProps["endpoint"] != null ? apiProps["endpoint"] : ''
+        resValue 'string', 'api_key', apiProps["key"] != null ? apiProps["key"] : ''
     }
 
     signingConfigs {

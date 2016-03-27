@@ -60,6 +60,10 @@ subprojects {
         if (localProps['keystore.props.file'] != null) {
             keyProps.load(new FileInputStream(file(localProps['keystore.props.file'])))
         }
+        apiProps = new Properties()
+        if (localProps['api.props.file'] != null) {
+            apiProps.load(new FileInputStream(file(localProps['api.props.file'])))
+        }
 
         versionMajor = 1
         versionMinor = 14

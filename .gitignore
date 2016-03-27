@@ -42,3 +42,5 @@ out/
 
 ## keystore properties
 keystore.properties
+fabric.properties
+api.properties
