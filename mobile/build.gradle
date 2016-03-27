@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion compileAndTargetSdkLevel
@@ -39,29 +39,32 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'RtlHardcoded'
-    }
-
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 }
 
 dependencies {
+
+    // Muzei
+    compile "com.google.android.apps.muzei:muzei-api:2.0"
+
     // Dagger 2
     compile "com.google.dagger:dagger:${daggerVersion}"
     apt "com.google.dagger:dagger-compiler:${daggerVersion}"
-    provided "org.glassfish:javax.annotation:10.0-b28"
+    provided "javax.annotation:jsr250-api:1.0"
 
+    // Support
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
 
-    compile "com.google.android.apps.muzei:muzei-api:2.0"
+    // Network
     compile "com.squareup.retrofit2:retrofit:2.0.0"
     compile "com.squareup.retrofit2:converter-gson:2.0.0"
     compile "com.squareup.okhttp3:okhttp:3.2.0"
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
     compile "com.google.code.gson:gson:2.6.2"
+
+    // Other
     compile "com.jakewharton.timber:timber:4.1.1"
     compile('de.psdev.licensesdialog:licensesdialog:1.8.0') {
         exclude module: 'support-v4'
