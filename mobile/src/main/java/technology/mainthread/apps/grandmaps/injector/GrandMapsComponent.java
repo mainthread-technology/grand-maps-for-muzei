@@ -13,7 +13,7 @@ public interface GrandMapsComponent extends GrandMapsGraph {
         public static GrandMapsComponent init(GrandMapsApp app) {
             return DaggerGrandMapsComponent.builder()
                     .grandMapsAppModule(new GrandMapsAppModule(app))
-                    .grandMapsApiModule(new GrandMapsApiModule(app.getResources()))
+                    .grandMapsApiModule(new GrandMapsApiModule(app))
                     .build();
         }
 

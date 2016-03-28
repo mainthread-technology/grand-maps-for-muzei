@@ -1,48 +1,57 @@
 package technology.mainthread.apps.grandmaps.injector;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import technology.mainthread.apps.grandmaps.GrandMapsApp;
 
 @Module
 public class GrandMapsAppModule {
 
-    private final GrandMapsApp application;
+    private final Context context;
+    private final Resources resources;
 
-    public GrandMapsAppModule(GrandMapsApp application) {
-        this.application = application;
+    public GrandMapsAppModule(Application application) {
+        this.context = application.getApplicationContext();
+        this.resources = application.getResources();
     }
 
     @Provides
     @Singleton
     Context provideApplicationContext() {
-        return application;
+        return context;
     }
 
     @Provides
     @Singleton
     Resources provideApplicationResources() {
-        return application.getResources();
+        return resources;
     }
 
     @Provides
     @Singleton
     SharedPreferences provideSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(application);
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Provides
     @Singleton
     ConnectivityManager provideConnectivityManger() {
-        return (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
+
+    @Provides
+    Handler provideMainThreadHandler() {
+        return new Handler(context.getMainLooper());
+    }
+
 
 }

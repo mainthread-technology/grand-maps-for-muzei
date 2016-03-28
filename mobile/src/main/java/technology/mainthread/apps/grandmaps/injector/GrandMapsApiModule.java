@@ -1,6 +1,10 @@
 package technology.mainthread.apps.grandmaps.injector;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Handler;
 
 import java.io.IOException;
 
@@ -16,17 +20,22 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import technology.mainthread.apps.grandmaps.BuildConfig;
+import technology.mainthread.apps.grandmaps.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.R;
+import technology.mainthread.apps.grandmaps.data.ArtSourceService;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
+import technology.mainthread.apps.grandmaps.data.GrandMapsArtSourceService;
 import technology.mainthread.apps.grandmaps.settings.GrandMapsPreferences;
 
 @Module
 public class GrandMapsApiModule {
 
+    private final Context context;
     private final Resources resources;
 
-    public GrandMapsApiModule(Resources resources) {
-        this.resources = resources;
+    public GrandMapsApiModule(Application application) {
+        this.context = application.getApplicationContext();
+        this.resources = application.getResources();
     }
 
     @Provides
@@ -63,5 +72,12 @@ public class GrandMapsApiModule {
                 .build();
 
         return restAdapter.create(GrandMapsApi.class);
+    }
+
+    @Provides
+    ArtSourceService artSourceService(Handler handler, SharedPreferences sharedPreferences, GrandMapsPreferences preferences,
+                                      GrandMapsApi api, ConnectivityHelper connectivityHelper) {
+        return new GrandMapsArtSourceService(context, resources, handler, sharedPreferences,
+                preferences, api, connectivityHelper);
     }
 }
