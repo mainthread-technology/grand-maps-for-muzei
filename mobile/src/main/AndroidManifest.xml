@@ -42,7 +42,7 @@
 
         </service>
 
-        <receiver android:name=".AppUpdateReceiver">
+        <receiver android:name=".service.AppUpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <data

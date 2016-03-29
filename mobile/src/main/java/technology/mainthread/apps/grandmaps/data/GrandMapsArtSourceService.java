@@ -23,7 +23,6 @@ import java.util.Random;
 
 import retrofit2.Response;
 import technology.mainthread.apps.grandmaps.BuildConfig;
-import technology.mainthread.apps.grandmaps.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
 import technology.mainthread.apps.grandmaps.data.model.RefreshType;
@@ -82,7 +81,11 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     }
 
     @Override
-    public long getNextUpdateTime() {
+    public long getNewRandomUpdateTime() {
+        if (RefreshType.FEATURED.equals(preferences.getRefreshType())) {
+            throw new RuntimeException("Cannot request random update time if using featured mode");
+        }
+
         return getNextUpdateTime(0L);
     }
 
@@ -91,21 +94,18 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         if (reason != MuzeiArtSource.UPDATE_REASON_USER_NEXT && preferences.onlyUpdateOnWifi()
                 && !connectivityHelper.isConnectedToWifi()) {
             Timber.d("only update on wifi, skipping");
-            return UpdateArtResponse.Builder()
+            return UpdateArtResponse.builder()
                     .nextUpdateTime(System.currentTimeMillis() + DEFAULT_REFRESH_TIME)
                     .build();
         }
 
         try {
-            Response<GrandMapsResponse> response = null;
-            switch (preferences.getRefreshType()) {
-                case RefreshType.FEATURED:
-                    response = api.getFeatured().execute();
-                    break;
-                case RefreshType.RANDOM:
-                    String currentToken = currentArtwork != null ? currentArtwork.getToken() : "";
-                    response = api.getRandom(currentToken).execute();
-                    break;
+            Response<GrandMapsResponse> response;
+            if (RefreshType.RANDOM.equals(preferences.getRefreshType())) {
+                String currentToken = currentArtwork != null ? currentArtwork.getToken() : "";
+                response = api.getRandom(currentToken).execute();
+            } else {
+                response = api.getFeatured().execute();
             }
 
             if (response.isSuccessful()) {
@@ -114,16 +114,8 @@ public class GrandMapsArtSourceService implements ArtSourceService {
                     throw new RemoteMuzeiArtSource.RetryException(); // TODO: backoff?
                 }
 
-                Artwork artwork = new Artwork.Builder()
-                        .title(responseBody.getTitle())
-                        .byline(String.format(Locale.ENGLISH, "%s, %d", responseBody.getAuthor(), responseBody.getYear()))
-                        .token(responseBody.getId())
-                        .imageUri(Uri.parse(responseBody.getImageAddress()))
-                        .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(responseBody.getReferenceAddress())))
-                        .build();
-
-                return UpdateArtResponse.Builder()
-                        .artwork(artwork)
+                return UpdateArtResponse.builder()
+                        .artwork(convertResponseToArtwork(responseBody))
                         .nextUpdateTime(getNextUpdateTime(responseBody.getNextUpdate() * 1000L))
                         .build();
             } else {
@@ -131,12 +123,12 @@ public class GrandMapsArtSourceService implements ArtSourceService {
                 int statusCode = response.code();
                 if (500 <= statusCode && statusCode < 600) {
                     Timber.w("Network error, code: %d, message: %s", response.code(), response.message());
-                    throw new RemoteMuzeiArtSource.RetryException();
+                    throw new RemoteMuzeiArtSource.RetryException(); // TODO: backoff
                 }
 
                 // TODO: implement a backoff
                 Timber.d("Wallpaper update failed, retrying in %d minutes", MAX_JITTER_MILLIS * 2 / (60 * 1000));
-                return UpdateArtResponse.Builder()
+                return UpdateArtResponse.builder()
                         .nextUpdateTime(System.currentTimeMillis() + MAX_JITTER_MILLIS * 2)
                         .build();
             }
@@ -148,7 +140,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
 
     @Override
     public void shareArtwork(Artwork currentArtwork) {
-        if (currentArtwork == null) {
+        if (currentArtwork == null || currentArtwork.getViewIntent() == null || currentArtwork.getByline() == null) {
             Timber.w("No current artwork, can't share.");
             displayToast(resources.getString(R.string.error_no_map_to_share));
         } else {
@@ -171,6 +163,16 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         final long nextUpdateTimeMillis = sharedPreferences.getLong(PREF_SCHEDULED_UPDATE_TIME_MILLIS, 0);
 
         displayToast("Next update time: " + dateFormat.format(new Date(nextUpdateTimeMillis)));
+    }
+
+    private Artwork convertResponseToArtwork(GrandMapsResponse responseBody) {
+        return new Artwork.Builder()
+                .title(responseBody.getTitle())
+                .byline(String.format(Locale.ENGLISH, "%s, %d", responseBody.getAuthor(), responseBody.getYear()))
+                .token(responseBody.getId())
+                .imageUri(Uri.parse(responseBody.getImageAddress()))
+                .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(responseBody.getReferenceAddress())))
+                .build();
     }
 
     private long getNextUpdateTime(long nextUpdateTimeMillis) {

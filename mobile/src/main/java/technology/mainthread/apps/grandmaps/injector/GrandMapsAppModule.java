@@ -53,5 +53,4 @@ public class GrandMapsAppModule {
         return new Handler(context.getMainLooper());
     }
 
-
 }

@@ -23,7 +23,7 @@ public interface ArtSourceService {
      * Gets the next update time depending on the {@link technology.mainthread.apps.grandmaps.data.model.RefreshType}
      * @return time in milli seconds to next update
      */
-    long getNextUpdateTime();
+    long getNewRandomUpdateTime();
 
     /**
      * Updates the next map

@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps;
+package technology.mainthread.apps.grandmaps.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import technology.mainthread.apps.grandmaps.GrandMapsApp;
+import technology.mainthread.apps.grandmaps.R;
 import timber.log.Timber;
 
 public class AppUpdateReceiver extends BroadcastReceiver {

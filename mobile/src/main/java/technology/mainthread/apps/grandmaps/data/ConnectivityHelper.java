@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps;
+package technology.mainthread.apps.grandmaps.data;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

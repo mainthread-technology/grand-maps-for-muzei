@@ -20,17 +20,16 @@ public class UpdateArtResponse {
         nextUpdateTime = builder.nextUpdateTime;
     }
 
-    public static Builder Builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public static Builder Builder(UpdateArtResponse copy) {
+    public static Builder builder(UpdateArtResponse copy) {
         Builder builder = new Builder();
         builder.artwork = copy.artwork;
         builder.nextUpdateTime = copy.nextUpdateTime;
         return builder;
     }
-
 
     public static final class Builder {
         private Artwork artwork;

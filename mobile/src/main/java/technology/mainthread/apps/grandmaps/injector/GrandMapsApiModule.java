@@ -20,7 +20,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import technology.mainthread.apps.grandmaps.BuildConfig;
-import technology.mainthread.apps.grandmaps.ConnectivityHelper;
+import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.data.ArtSourceService;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;

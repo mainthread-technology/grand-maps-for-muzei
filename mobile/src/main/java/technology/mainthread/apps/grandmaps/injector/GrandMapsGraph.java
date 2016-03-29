@@ -1,6 +1,6 @@
 package technology.mainthread.apps.grandmaps.injector;
 
-import technology.mainthread.apps.grandmaps.AppUpdateReceiver;
+import technology.mainthread.apps.grandmaps.service.AppUpdateReceiver;
 import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
 import technology.mainthread.apps.grandmaps.settings.SettingsActivity;
 
