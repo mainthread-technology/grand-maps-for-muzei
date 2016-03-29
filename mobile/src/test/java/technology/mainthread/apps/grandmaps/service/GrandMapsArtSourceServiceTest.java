@@ -106,7 +106,7 @@ public class GrandMapsArtSourceServiceTest {
                 .viewIntent(intent)
                 .build();
 
-        sut = new GrandMapsArtSourceService(context, resources, handler, sharedPreferences, preferences, api, connectivityHelper);
+        sut = new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper);
     }
 
     @Test
@@ -254,7 +254,7 @@ public class GrandMapsArtSourceServiceTest {
     @Test
     public void displayRefreshInfo() {
         // When
-        sut.displayRefreshInfo();
+        sut.displayRefreshInfo(sharedPreferences);
 
         // Then
         verify(handler).post(any(Runnable.class));

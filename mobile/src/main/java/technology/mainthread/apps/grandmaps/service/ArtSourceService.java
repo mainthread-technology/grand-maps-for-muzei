@@ -1,5 +1,7 @@
 package technology.mainthread.apps.grandmaps.service;
 
+import android.content.SharedPreferences;
+
 import com.google.android.apps.muzei.api.Artwork;
 import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
 import com.google.android.apps.muzei.api.UserCommand;
@@ -46,6 +48,5 @@ public interface ArtSourceService {
     /**
      * Toast the next refresh information
      */
-    void displayRefreshInfo();
-
+    void displayRefreshInfo(SharedPreferences sharedPreferences);
 }

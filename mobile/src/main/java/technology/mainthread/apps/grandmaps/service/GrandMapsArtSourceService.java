@@ -43,7 +43,6 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     private final Context context;
     private final Resources resources;
     private final Handler mainThreadHandler;
-    private final SharedPreferences sharedPreferences;
     private final GrandMapsPreferences preferences;
     private final GrandMapsApi api;
     private final ConnectivityHelper connectivityHelper;
@@ -52,14 +51,12 @@ public class GrandMapsArtSourceService implements ArtSourceService {
             Context context,
             Resources resources,
             Handler mainThreadHandler,
-            SharedPreferences sharedPreferences,
             GrandMapsPreferences preferences,
             GrandMapsApi api,
             ConnectivityHelper connectivityHelper) {
         this.context = context;
         this.resources = resources;
         this.mainThreadHandler = mainThreadHandler;
-        this.sharedPreferences = sharedPreferences;
         this.preferences = preferences;
         this.api = api;
         this.connectivityHelper = connectivityHelper;
@@ -160,7 +157,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     }
 
     @Override
-    public void displayRefreshInfo() {
+    public void displayRefreshInfo(SharedPreferences sharedPreferences) {
         final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.UK);
         final long nextUpdateTimeMillis = sharedPreferences.getLong(PREF_SCHEDULED_UPDATE_TIME_MILLIS, 0);
 

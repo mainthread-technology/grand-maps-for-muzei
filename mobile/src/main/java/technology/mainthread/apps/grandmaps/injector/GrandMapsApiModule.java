@@ -75,9 +75,8 @@ public class GrandMapsApiModule {
     }
 
     @Provides
-    ArtSourceService artSourceService(Handler handler, SharedPreferences sharedPreferences, GrandMapsPreferences preferences,
+    ArtSourceService artSourceService(Handler handler, GrandMapsPreferences preferences,
                                       GrandMapsApi api, ConnectivityHelper connectivityHelper) {
-        return new GrandMapsArtSourceService(context, resources, handler, sharedPreferences,
-                preferences, api, connectivityHelper);
+        return new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper);
     }
 }
