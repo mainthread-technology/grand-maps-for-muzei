@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps.settings;
+package technology.mainthread.apps.grandmaps.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import com.google.android.apps.muzei.api.MuzeiArtSource;
 import javax.inject.Inject;
 
 import technology.mainthread.apps.grandmaps.GrandMapsApp;
+import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
 import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
 

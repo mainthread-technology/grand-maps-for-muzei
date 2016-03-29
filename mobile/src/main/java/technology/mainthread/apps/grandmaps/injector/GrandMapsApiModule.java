@@ -25,7 +25,7 @@ import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.service.ArtSourceService;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
 import technology.mainthread.apps.grandmaps.service.GrandMapsArtSourceService;
-import technology.mainthread.apps.grandmaps.settings.GrandMapsPreferences;
+import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
 
 @Module
 public class GrandMapsApiModule {

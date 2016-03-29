@@ -2,7 +2,7 @@ package technology.mainthread.apps.grandmaps.injector;
 
 import technology.mainthread.apps.grandmaps.service.AppUpdateReceiver;
 import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
-import technology.mainthread.apps.grandmaps.settings.SettingsActivity;
+import technology.mainthread.apps.grandmaps.view.SettingsActivity;
 
 public interface GrandMapsGraph {
 

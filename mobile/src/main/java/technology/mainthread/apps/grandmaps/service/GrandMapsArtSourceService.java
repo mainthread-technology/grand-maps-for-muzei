@@ -29,7 +29,7 @@ import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
 import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
 import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
-import technology.mainthread.apps.grandmaps.settings.GrandMapsPreferences;
+import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
 import timber.log.Timber;
 
 public class GrandMapsArtSourceService implements ArtSourceService {

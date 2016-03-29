@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps.settings;
+package technology.mainthread.apps.grandmaps.data;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;

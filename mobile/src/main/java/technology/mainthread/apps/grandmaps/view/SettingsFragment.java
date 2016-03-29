@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps.settings;
+package technology.mainthread.apps.grandmaps.view;
 
 import android.app.Fragment;
 import android.content.pm.PackageInfo;
