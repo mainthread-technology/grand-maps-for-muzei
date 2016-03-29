@@ -75,10 +75,15 @@ public class GrandMapsArtSourceService implements ArtSourceService {
 
         commands.add(new UserCommand(COMMAND_ID_SHARE, resources.getString(R.string.action_share)));
 
-        if (preferences.getRefreshType() == RefreshType.TYPE_RANDOM) {
+        if (RefreshType.RANDOM.equals(preferences.getRefreshType())) {
             commands.add(new UserCommand(MuzeiArtSource.BUILTIN_COMMAND_ID_NEXT_ARTWORK));
         }
         return commands;
+    }
+
+    @Override
+    public long getNextUpdateTime() {
+        return getNextUpdateTime(0L);
     }
 
     @Override
@@ -94,10 +99,10 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         try {
             Response<GrandMapsResponse> response = null;
             switch (preferences.getRefreshType()) {
-                case TYPE_FEATURED:
+                case RefreshType.FEATURED:
                     response = api.getFeatured().execute();
                     break;
-                case TYPE_RANDOM:
+                case RefreshType.RANDOM:
                     String currentToken = currentArtwork != null ? currentArtwork.getToken() : "";
                     response = api.getRandom(currentToken).execute();
                     break;
@@ -170,11 +175,11 @@ public class GrandMapsArtSourceService implements ArtSourceService {
 
     private long getNextUpdateTime(long nextUpdateTimeMillis) {
         switch (preferences.getRefreshType()) {
-            case TYPE_FEATURED:
+            case RefreshType.FEATURED:
                 Random random = new Random();
                 nextUpdateTimeMillis += random.nextInt(MAX_JITTER_MILLIS);
                 break;
-            case TYPE_RANDOM:
+            case RefreshType.RANDOM:
                 nextUpdateTimeMillis = preferences.getNextRandomUpdateTime();
                 break;
         }

@@ -62,7 +62,7 @@ public class GrandMapsArtSourceServiceTest {
     public void setUp() throws Exception {
         sut = new GrandMapsArtSourceService(context, resources, handler, sharedPreferences, preferences, api, connectivityHelper);
 
-        when(preferences.getRefreshType()).thenReturn(RefreshType.TYPE_FEATURED);
+        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
         when(api.getFeatured()).thenReturn(retrofitCall);
         when(api.getRandom(anyString())).thenReturn(retrofitCall);
     }
@@ -81,7 +81,7 @@ public class GrandMapsArtSourceServiceTest {
     @Test
     public void getUserCommandsIfRandom() {
         // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.TYPE_RANDOM);
+        when(preferences.getRefreshType()).thenReturn(RefreshType.RANDOM);
 
         // When
         List<UserCommand> userCommands = sut.getUserCommands();

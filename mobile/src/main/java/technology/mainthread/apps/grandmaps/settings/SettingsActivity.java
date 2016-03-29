@@ -53,13 +53,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Intent getIntentWithActionAndExtras() {
         Intent intent = GrandMapsArtSource.getGrandMapArtSourceIntent(this);
-        RefreshType type = preferences.getRefreshType();
+        @RefreshType String type = preferences.getRefreshType();
 
-        if (type == RefreshType.TYPE_FEATURED) {
-            intent.setAction(ACTION_HANDLE_COMMAND)
-                    .putExtra(EXTRA_COMMAND_ID, MuzeiArtSource.BUILTIN_COMMAND_ID_NEXT_ARTWORK);
-        } else if (type == RefreshType.TYPE_RANDOM) {
-            intent.setAction(RefreshType.TYPE_RANDOM.name());
+        switch (type) {
+            case RefreshType.RANDOM:
+                intent.setAction(GrandMapsArtSource.ACTION_QUEUE_RANDOM_REFRESH);
+                break;
+            case RefreshType.FEATURED:
+            default:
+                intent.setAction(ACTION_HANDLE_COMMAND).putExtra(EXTRA_COMMAND_ID, MuzeiArtSource.BUILTIN_COMMAND_ID_NEXT_ARTWORK);
+                break;
         }
 
         return intent;

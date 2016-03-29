@@ -20,6 +20,12 @@ public interface ArtSourceService {
     List<UserCommand> getUserCommands();
 
     /**
+     * Gets the next update time depending on the {@link technology.mainthread.apps.grandmaps.data.model.RefreshType}
+     * @return time in milli seconds to next update
+     */
+    long getNextUpdateTime();
+
+    /**
      * Updates the next map
      * @param reason muzei reason for updating
      * @param currentArtwork current artwork that is being shown

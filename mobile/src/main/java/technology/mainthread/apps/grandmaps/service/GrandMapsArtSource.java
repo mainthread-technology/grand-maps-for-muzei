@@ -47,7 +47,7 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
         // TODO: Use extra from intent?
         String action = intent.getAction();
         if (ACTION_QUEUE_RANDOM_REFRESH.equals(action)) {
-            scheduleUpdate(0);
+            scheduleUpdate(artSourceService.getNextUpdateTime());
         }
     }
 

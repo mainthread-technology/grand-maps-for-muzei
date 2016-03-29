@@ -17,7 +17,7 @@ public class SettingsFragment extends PreferenceFragment {
     private final Preference.OnPreferenceChangeListener typePrefChangedListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            onTypePreferenceChanged((String) newValue);
+            onTypePreferenceChanged(newValue);
             return true;
         }
     };
@@ -72,8 +72,8 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    private void onTypePreferenceChanged(String newValue) {
-        frequencyPref.setEnabled(!newValue.equals(RefreshType.TYPE_FEATURED.name()));
+    private void onTypePreferenceChanged(Object newValue) {
+        frequencyPref.setEnabled(!RefreshType.FEATURED.equals(newValue));
     }
 
     private void onFrequencyPreferenceChanged(Preference preference, String newValue) {

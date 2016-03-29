@@ -23,9 +23,9 @@ public class GrandMapsPreferences {
         this.resources = resources;
     }
 
-    public RefreshType getRefreshType() {
-        return RefreshType.valueOf(preferences
-                .getString(resources.getString(R.string.key_type), RefreshType.TYPE_FEATURED.name()));
+    public @RefreshType String getRefreshType() {
+        String type = preferences.getString(resources.getString(R.string.key_type), RefreshType.FEATURED);
+        return RefreshType.RANDOM.equals(type) ? RefreshType.RANDOM : RefreshType.FEATURED;
     }
 
     public long getNextRandomUpdateTime() {
