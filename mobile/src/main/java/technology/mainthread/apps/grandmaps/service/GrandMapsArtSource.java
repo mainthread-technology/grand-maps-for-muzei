@@ -8,7 +8,6 @@ import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
 import javax.inject.Inject;
 
 import technology.mainthread.apps.grandmaps.GrandMapsApp;
-import technology.mainthread.apps.grandmaps.data.ArtSourceService;
 import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
 
 /**

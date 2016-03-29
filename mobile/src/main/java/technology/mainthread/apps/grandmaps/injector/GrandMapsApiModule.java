@@ -22,9 +22,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import technology.mainthread.apps.grandmaps.BuildConfig;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.R;
-import technology.mainthread.apps.grandmaps.data.ArtSourceService;
+import technology.mainthread.apps.grandmaps.service.ArtSourceService;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
-import technology.mainthread.apps.grandmaps.data.GrandMapsArtSourceService;
+import technology.mainthread.apps.grandmaps.service.GrandMapsArtSourceService;
 import technology.mainthread.apps.grandmaps.settings.GrandMapsPreferences;
 
 @Module

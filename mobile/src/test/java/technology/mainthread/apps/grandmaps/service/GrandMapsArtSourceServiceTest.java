@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps.data;
+package technology.mainthread.apps.grandmaps.service;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import technology.mainthread.apps.grandmaps.BuildConfig;
+import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
+import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
 import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
 import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
