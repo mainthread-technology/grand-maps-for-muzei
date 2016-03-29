@@ -10,7 +10,7 @@ import android.preference.PreferenceFragment;
 
 import de.psdev.licensesdialog.LicensesDialog;
 import technology.mainthread.apps.grandmaps.R;
-import technology.mainthread.apps.grandmaps.RefreshType;
+import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 
 public class SettingsFragment extends PreferenceFragment {
 

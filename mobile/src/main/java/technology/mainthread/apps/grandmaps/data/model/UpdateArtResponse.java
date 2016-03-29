@@ -1,4 +1,4 @@
-package technology.mainthread.apps.grandmaps.data;
+package technology.mainthread.apps.grandmaps.data.model;
 
 import com.google.android.apps.muzei.api.Artwork;
 

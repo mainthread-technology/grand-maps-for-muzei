@@ -8,9 +8,8 @@ import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
 import javax.inject.Inject;
 
 import technology.mainthread.apps.grandmaps.GrandMapsApp;
-import technology.mainthread.apps.grandmaps.RefreshType;
 import technology.mainthread.apps.grandmaps.data.ArtSourceService;
-import technology.mainthread.apps.grandmaps.data.UpdateArtResponse;
+import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
 
 /**
  * Muzei Grand map art source
@@ -19,13 +18,13 @@ import technology.mainthread.apps.grandmaps.data.UpdateArtResponse;
  */
 public class GrandMapsArtSource extends RemoteMuzeiArtSource {
 
-    private static final String SOURCE_NAME = GrandMapsArtSource.class.getSimpleName();
+    public static final String ACTION_QUEUE_RANDOM_REFRESH = "action_queue_random_refresh";
 
     @Inject
     ArtSourceService artSourceService;
 
     public GrandMapsArtSource() {
-        super(SOURCE_NAME);
+        super(GrandMapsArtSource.class.getSimpleName());
     }
 
     public static Intent getGrandMapArtSourceIntent(Context context) {
@@ -45,9 +44,9 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
     protected void onHandleIntent(Intent intent) {
         super.onHandleIntent(intent);
 
-        // TODO is this correct?
+        // TODO: Use extra from intent?
         String action = intent.getAction();
-        if (RefreshType.TYPE_RANDOM.name().equals(action)) {
+        if (ACTION_QUEUE_RANDOM_REFRESH.equals(action)) {
             scheduleUpdate(0);
         }
     }

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import technology.mainthread.apps.grandmaps.R;
-import technology.mainthread.apps.grandmaps.RefreshType;
+import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 
 @Singleton
 public class GrandMapsPreferences {

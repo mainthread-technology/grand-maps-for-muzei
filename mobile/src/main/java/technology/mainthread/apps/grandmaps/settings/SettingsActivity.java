@@ -10,7 +10,7 @@ import com.google.android.apps.muzei.api.MuzeiArtSource;
 import javax.inject.Inject;
 
 import technology.mainthread.apps.grandmaps.GrandMapsApp;
-import technology.mainthread.apps.grandmaps.RefreshType;
+import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
 
 import static com.google.android.apps.muzei.api.internal.ProtocolConstants.ACTION_HANDLE_COMMAND;

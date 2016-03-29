@@ -3,6 +3,7 @@ package technology.mainthread.apps.grandmaps.data;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
 
 public interface GrandMapsApi {
 

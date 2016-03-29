@@ -6,6 +6,8 @@ import com.google.android.apps.muzei.api.UserCommand;
 
 import java.util.List;
 
+import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
+
 public interface ArtSourceService {
 
     int COMMAND_ID_SHARE = 1;
