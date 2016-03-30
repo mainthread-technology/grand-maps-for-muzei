@@ -38,7 +38,7 @@
 
             <meta-data
                 android:name="settingsActivity"
-                android:value="technology.mainthread.apps.grandmaps.settings.SettingsActivity" />
+                android:value="technology.mainthread.apps.grandmaps.view.SettingsActivity" />
 
         </service>
 
