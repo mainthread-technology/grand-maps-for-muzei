@@ -68,7 +68,7 @@ dependencies {
     compile "com.google.code.gson:gson:2.6.2"
 
     // Other
-    compile "com.jakewharton.timber:timber:4.1.1"
+    compile "com.jakewharton.timber:timber:4.1.2"
     compile('de.psdev.licensesdialog:licensesdialog:1.8.0') {
         exclude module: 'support-v4'
     }
