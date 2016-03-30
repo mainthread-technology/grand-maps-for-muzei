@@ -46,7 +46,7 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.verifyNew;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Uri.class, Intent.class, GrandMapsArtSourceService.class})
+@PrepareForTest({Uri.class, Intent.class, System.class, GrandMapsArtSourceService.class})
 public class GrandMapsArtSourceServiceTest {
 
     @Mock
@@ -82,9 +82,12 @@ public class GrandMapsArtSourceServiceTest {
     private Artwork artwork;
 
     private GrandMapsArtSourceService sut;
+    private long currentTimeAtSetup;
 
     @Before
     public void setUp() throws Exception {
+        currentTimeAtSetup = System.currentTimeMillis() - 10000; // Remove any time errors
+
         // Uri
         PowerMockito.mockStatic(Uri.class);
         PowerMockito.when(Uri.class, "parse", anyString()).thenReturn(uri);
@@ -176,6 +179,7 @@ public class GrandMapsArtSourceServiceTest {
 
         // Then
         verify(api).getFeatured();
+        verify(preferences).resetRetryCount();
         verifyArtResponse(artResponse);
         assertTrue(artResponse.getNextUpdateTime() > 0L);
     }
@@ -193,14 +197,27 @@ public class GrandMapsArtSourceServiceTest {
 
         // Then
         verify(api).getRandom(artwork.getToken());
+        verify(preferences).resetRetryCount();
         verifyArtResponse(artResponse);
         assertEquals(nextRandomUpdateTime, artResponse.getNextUpdateTime());
     }
 
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
-    public void updateArtThrowsWhenServerError() throws Exception {
+    public void updateArtThrowsWhenImageUriIsNull() throws Exception {
         // Given
         when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
+        when(preferences.getRetryCount()).thenReturn(0);
+        when(retrofitCall.execute()).thenReturn(Response.success(GrandMapsResponse.builder().build()));
+
+        // When
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+    }
+
+    @Test(expected = RemoteMuzeiArtSource.RetryException.class)
+    public void updateArtThrowsWhen0Retries() throws Exception {
+        // Given
+        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
+        when(preferences.getRetryCount()).thenReturn(0);
         Response<GrandMapsResponse> error = Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), ""));
         when(retrofitCall.execute()).thenReturn(error);
 
@@ -208,18 +225,66 @@ public class GrandMapsArtSourceServiceTest {
         sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
     }
 
-    @Test
-    public void updateArtReceives400Error() throws Exception {
+    @Test(expected = RemoteMuzeiArtSource.RetryException.class)
+    public void updateArtThrowsWhen3Retries() throws Exception {
         // Given
         when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
+        when(preferences.getRetryCount()).thenReturn(3);
         Response<GrandMapsResponse> error = Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        when(retrofitCall.execute()).thenReturn(error);
+
+        // When
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+    }
+
+    @Test
+    public void updateArtDoesNotThrowAndSchedulesUpdateMoreThan5MinsInFuture() throws Exception {
+        // Given
+        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
+        when(preferences.getRetryCount()).thenReturn(5);
+        Response<GrandMapsResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
         UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
 
         // Then
-        assertTrue(artResponse.getNextUpdateTime() > System.currentTimeMillis());
+        int fiveMins = 5 * 60 * 1000;
+        assertTrue(artResponse.getNextUpdateTime() > currentTimeAtSetup + fiveMins);
+        assertNull(artResponse.getArtwork());
+    }
+
+    @Test
+    public void updateArtDoesNotThrowAndSchedulesUpdate12HoursInFuture() throws Exception {
+        // Given
+        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
+        when(preferences.getRetryCount()).thenReturn(8);
+        Response<GrandMapsResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        when(retrofitCall.execute()).thenReturn(error);
+
+        // When
+        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+
+        // Then
+        int twelveHours = 12 * 60 * 60 * 1000;
+        assertTrue(artResponse.getNextUpdateTime() > currentTimeAtSetup + twelveHours);
+        assertNull(artResponse.getArtwork());
+    }
+
+    @Test
+    public void updateArtDoesNotThrowAndSchedulesUpdate24HoursInFuture() throws Exception {
+        // Given
+        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
+        when(preferences.getRetryCount()).thenReturn(12);
+        Response<GrandMapsResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        when(retrofitCall.execute()).thenReturn(error);
+
+        // When
+        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+
+        // Then
+        int twentyFourHours = 24 * 60 * 60 * 1000;
+        assertTrue(artResponse.getNextUpdateTime() > currentTimeAtSetup + twentyFourHours);
         assertNull(artResponse.getArtwork());
     }
 

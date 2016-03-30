@@ -49,4 +49,5 @@ public interface ArtSourceService {
      * Toast the next refresh information
      */
     void displayRefreshInfo(SharedPreferences sharedPreferences);
+
 }

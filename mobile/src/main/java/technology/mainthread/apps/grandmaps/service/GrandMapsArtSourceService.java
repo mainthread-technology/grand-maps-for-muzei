@@ -26,10 +26,10 @@ import technology.mainthread.apps.grandmaps.BuildConfig;
 import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
+import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
 import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
 import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
-import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
 import timber.log.Timber;
 
 public class GrandMapsArtSourceService implements ArtSourceService {
@@ -37,7 +37,8 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     private static final String PREF_SCHEDULED_UPDATE_TIME_MILLIS = "scheduled_update_time_millis";
 
     // Distribute update requests over a period of 5 minutes.
-    private static final int MAX_JITTER_MILLIS = 5 * 60 * 1000;
+    private static final int FIVE_MINS_IN_MILLI_SECONDS = 5 * 60 * 1000;
+    private static final int TWELVE_HRS_IN_MILLI_SECONDS = 12 * 60 * 60 * 1000;
     private static final int DEFAULT_REFRESH_TIME = 7200000;
 
     private final Context context;
@@ -46,6 +47,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     private final GrandMapsPreferences preferences;
     private final GrandMapsApi api;
     private final ConnectivityHelper connectivityHelper;
+    private final Random random;
 
     public GrandMapsArtSourceService(
             Context context,
@@ -60,6 +62,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         this.preferences = preferences;
         this.api = api;
         this.connectivityHelper = connectivityHelper;
+        this.random = new Random();
     }
 
     @Override
@@ -110,30 +113,22 @@ public class GrandMapsArtSourceService implements ArtSourceService {
             if (response.isSuccessful()) {
                 GrandMapsResponse responseBody = response.body();
                 if (responseBody == null || responseBody.getImageAddress() == null) {
-                    throw new RemoteMuzeiArtSource.RetryException(); // TODO: backoff?
+                    return handleError();
                 }
+
+                preferences.resetRetryCount();
 
                 return UpdateArtResponse.builder()
                         .artwork(convertResponseToArtwork(responseBody))
                         .nextUpdateTime(getNextUpdateTime(responseBody.getNextUpdate() * 1000L))
                         .build();
             } else {
-                // If server error then retry
-                int statusCode = response.code();
-                if (500 <= statusCode && statusCode < 600) {
-                    Timber.w("Network error, code: %d, message: %s", response.code(), response.message());
-                    throw new RemoteMuzeiArtSource.RetryException(); // TODO: backoff
-                }
-
-                // TODO: implement a backoff
-                Timber.d("Wallpaper update failed, retrying in %d minutes", MAX_JITTER_MILLIS * 2 / (60 * 1000));
-                return UpdateArtResponse.builder()
-                        .nextUpdateTime(System.currentTimeMillis() + MAX_JITTER_MILLIS * 2)
-                        .build();
+                Timber.w("Network error, code: %d, message: %s", response.code(), response.message());
+                return handleError();
             }
         } catch (IOException e) {
-            Timber.e(e, "IOException");
-            throw new RemoteMuzeiArtSource.RetryException();
+            Timber.e(e, "Retrofit Error");
+            return handleError();
         }
     }
 
@@ -174,11 +169,28 @@ public class GrandMapsArtSourceService implements ArtSourceService {
                 .build();
     }
 
+    private UpdateArtResponse handleError() throws RemoteMuzeiArtSource.RetryException {
+        int retryCount = preferences.getRetryCount();
+        if (retryCount < 4) {
+            throw new RemoteMuzeiArtSource.RetryException();
+        } else {
+            int nextRetryFromNow = random.nextInt(FIVE_MINS_IN_MILLI_SECONDS) * 5;
+            if (retryCount > 11) {
+                nextRetryFromNow = TWELVE_HRS_IN_MILLI_SECONDS * 2; // 24 hours
+            } else if (retryCount > 7) {
+                nextRetryFromNow = TWELVE_HRS_IN_MILLI_SECONDS;
+            }
+
+            return UpdateArtResponse.builder()
+                    .nextUpdateTime(System.currentTimeMillis() + nextRetryFromNow)
+                    .build();
+        }
+    }
+
     private long getNextUpdateTime(long nextUpdateTimeMillis) {
         switch (preferences.getRefreshType()) {
             case RefreshType.FEATURED:
-                Random random = new Random();
-                nextUpdateTimeMillis += random.nextInt(MAX_JITTER_MILLIS);
+                nextUpdateTimeMillis += random.nextInt(FIVE_MINS_IN_MILLI_SECONDS);
                 break;
             case RefreshType.RANDOM:
                 nextUpdateTimeMillis = preferences.getNextRandomUpdateTime();

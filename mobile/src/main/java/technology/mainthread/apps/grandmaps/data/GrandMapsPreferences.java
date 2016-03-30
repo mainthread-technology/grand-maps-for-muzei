@@ -50,4 +50,26 @@ public class GrandMapsPreferences {
         return preferences.getBoolean(resources.getString(R.string.key_wifi), false);
     }
 
+    public int getRetryCount() {
+        String key = resources.getString(R.string.key_retry);
+        return incrementRetry(key);
+    }
+
+    public void resetRetryCount() {
+        resetRetry(resources.getString(R.string.key_retry));
+    }
+
+    private int incrementRetry(String key) {
+        int current = preferences.getInt(key, 0);
+        current++;
+        preferences.edit().putInt(key, current).apply();
+        return current;
+    }
+
+    private void resetRetry(String key) {
+        if (preferences.contains(key)) {
+            preferences.edit().remove(key).apply();
+        }
+    }
+
 }

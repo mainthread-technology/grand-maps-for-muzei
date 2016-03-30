@@ -16,6 +16,7 @@
     <string name="key_type">setting_update_type</string>
     <string name="key_frequency">setting_refresh_frequency</string>
     <string name="key_client_id">client_id</string>
+    <string name="key_retry">key_retry</string>
 
     <!-- Source type -->
     <string name="group_title_feed">Source</string>
