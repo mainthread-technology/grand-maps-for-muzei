@@ -2,7 +2,6 @@ package technology.mainthread.apps.grandmaps.injector;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Handler;
 
@@ -20,6 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import technology.mainthread.apps.grandmaps.BuildConfig;
+import technology.mainthread.apps.grandmaps.data.Clock;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.service.ArtSourceService;
@@ -76,7 +76,7 @@ public class GrandMapsApiModule {
 
     @Provides
     ArtSourceService artSourceService(Handler handler, GrandMapsPreferences preferences,
-                                      GrandMapsApi api, ConnectivityHelper connectivityHelper) {
-        return new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper);
+                                      GrandMapsApi api, ConnectivityHelper connectivityHelper, Clock clock) {
+        return new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper, clock);
     }
 }

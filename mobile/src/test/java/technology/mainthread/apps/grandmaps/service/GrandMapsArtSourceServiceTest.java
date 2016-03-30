@@ -27,6 +27,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import technology.mainthread.apps.grandmaps.BuildConfig;
+import technology.mainthread.apps.grandmaps.data.Clock;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
 import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
@@ -69,6 +70,8 @@ public class GrandMapsArtSourceServiceTest {
     private Uri uri;
     @Mock
     private Intent intent;
+    @Mock
+    private Clock clock;
 
     // Stub
     private final GrandMapsResponse apiResponse = GrandMapsResponse.builder()
@@ -82,12 +85,9 @@ public class GrandMapsArtSourceServiceTest {
     private Artwork artwork;
 
     private GrandMapsArtSourceService sut;
-    private long currentTimeAtSetup;
 
     @Before
     public void setUp() throws Exception {
-        currentTimeAtSetup = System.currentTimeMillis() - 10000; // Remove any time errors
-
         // Uri
         PowerMockito.mockStatic(Uri.class);
         PowerMockito.when(Uri.class, "parse", anyString()).thenReturn(uri);
@@ -100,6 +100,7 @@ public class GrandMapsArtSourceServiceTest {
         when(api.getFeatured()).thenReturn(retrofitCall);
         when(api.getRandom(anyString())).thenReturn(retrofitCall);
         when(intent.getDataString()).thenReturn("data string");
+        when(clock.currentTimeMillis()).thenReturn(0L);
 
         artwork = new Artwork.Builder()
                 .title("title")
@@ -109,7 +110,7 @@ public class GrandMapsArtSourceServiceTest {
                 .viewIntent(intent)
                 .build();
 
-        sut = new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper);
+        sut = new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper, clock);
     }
 
     @Test
@@ -250,7 +251,7 @@ public class GrandMapsArtSourceServiceTest {
 
         // Then
         int fiveMins = 5 * 60 * 1000;
-        assertTrue(artResponse.getNextUpdateTime() > currentTimeAtSetup + fiveMins);
+        assertTrue(artResponse.getNextUpdateTime() > fiveMins);
         assertNull(artResponse.getArtwork());
     }
 
@@ -267,7 +268,7 @@ public class GrandMapsArtSourceServiceTest {
 
         // Then
         int twelveHours = 12 * 60 * 60 * 1000;
-        assertTrue(artResponse.getNextUpdateTime() > currentTimeAtSetup + twelveHours);
+        assertEquals(twelveHours, artResponse.getNextUpdateTime());
         assertNull(artResponse.getArtwork());
     }
 
@@ -284,7 +285,7 @@ public class GrandMapsArtSourceServiceTest {
 
         // Then
         int twentyFourHours = 24 * 60 * 60 * 1000;
-        assertTrue(artResponse.getNextUpdateTime() > currentTimeAtSetup + twentyFourHours);
+        assertEquals(twentyFourHours, artResponse.getNextUpdateTime());
         assertNull(artResponse.getArtwork());
     }
 

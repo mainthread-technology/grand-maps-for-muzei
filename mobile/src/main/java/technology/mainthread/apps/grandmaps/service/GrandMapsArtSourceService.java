@@ -24,6 +24,7 @@ import java.util.Random;
 import retrofit2.Response;
 import technology.mainthread.apps.grandmaps.BuildConfig;
 import technology.mainthread.apps.grandmaps.R;
+import technology.mainthread.apps.grandmaps.data.Clock;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
 import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
@@ -47,6 +48,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     private final GrandMapsPreferences preferences;
     private final GrandMapsApi api;
     private final ConnectivityHelper connectivityHelper;
+    private final Clock clock;
     private final Random random;
 
     public GrandMapsArtSourceService(
@@ -55,13 +57,15 @@ public class GrandMapsArtSourceService implements ArtSourceService {
             Handler mainThreadHandler,
             GrandMapsPreferences preferences,
             GrandMapsApi api,
-            ConnectivityHelper connectivityHelper) {
+            ConnectivityHelper connectivityHelper,
+            Clock clock) {
         this.context = context;
         this.resources = resources;
         this.mainThreadHandler = mainThreadHandler;
         this.preferences = preferences;
         this.api = api;
         this.connectivityHelper = connectivityHelper;
+        this.clock = clock;
         this.random = new Random();
     }
 
@@ -97,7 +101,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
                 && !connectivityHelper.isConnectedToWifi()) {
             Timber.d("only update on wifi, skipping");
             return UpdateArtResponse.builder()
-                    .nextUpdateTime(System.currentTimeMillis() + DEFAULT_REFRESH_TIME)
+                    .nextUpdateTime(clock.currentTimeMillis() + DEFAULT_REFRESH_TIME)
                     .build();
         }
 
@@ -182,7 +186,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
             }
 
             return UpdateArtResponse.builder()
-                    .nextUpdateTime(System.currentTimeMillis() + nextRetryFromNow)
+                    .nextUpdateTime(clock.currentTimeMillis() + nextRetryFromNow)
                     .build();
         }
     }

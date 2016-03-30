@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'io.fabric'
+if (file('fabric.properties').exists()) {
+    apply plugin: 'io.fabric'
+}
 
 android {
     compileSdkVersion compileAndTargetSdkLevel
@@ -29,6 +31,7 @@ android {
         debug {
             versionNameSuffix '_debug_' + gitSha()
             applicationIdSuffix '.debug'
+            ext.enableCrashlytics = false
         }
         release {
             if (keyProps["store"] != null) {

@@ -16,11 +16,13 @@ public class GrandMapsPreferences {
 
     private final SharedPreferences preferences;
     private final Resources resources;
+    private Clock clock;
 
     @Inject
-    public GrandMapsPreferences(SharedPreferences preferences, Resources resources) {
+    public GrandMapsPreferences(SharedPreferences preferences, Resources resources, Clock clock) {
         this.preferences = preferences;
         this.resources = resources;
+        this.clock = clock;
     }
 
     public @RefreshType String getRefreshType() {
@@ -32,7 +34,7 @@ public class GrandMapsPreferences {
         int refreshFrequencyHours = Integer.parseInt(preferences.getString(resources.getString(R.string.key_frequency),
                 resources.getString(R.string.default_refresh_frequency)));
 
-        return System.currentTimeMillis() + refreshFrequencyHours * 60 * 60 * 1000;
+        return clock.currentTimeMillis() + refreshFrequencyHours * 60 * 60 * 1000;
     }
 
     public String getClientId() {
