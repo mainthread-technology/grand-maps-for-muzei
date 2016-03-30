@@ -31,10 +31,10 @@ public class GrandMapsPreferences {
     }
 
     public long getNextRandomUpdateTime() {
-        int refreshFrequencyHours = Integer.parseInt(preferences.getString(resources.getString(R.string.key_frequency),
+        long refreshFrequencyHours = Integer.parseInt(preferences.getString(resources.getString(R.string.key_frequency),
                 resources.getString(R.string.default_refresh_frequency)));
 
-        return clock.currentTimeMillis() + refreshFrequencyHours * 60 * 60 * 1000;
+        return clock.currentTimeMillis() + refreshFrequencyHours * 60L * 60L * 1000L;
     }
 
     public String getClientId() {

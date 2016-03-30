@@ -22,26 +22,28 @@ task findbugs(type: FindBugs, dependsOn: assembleDebug) {
     description 'Finds bugs'
     group 'verification'
 
-    ignoreFailures = true
     classes = fileTree("$projectDir/build/intermediates/classes/debug/")
     source = fileTree("$projectDir/src/main/java/")
     classpath = files()
     excludeFilter = file("${project(':').projectDir}/config/findbugs/excludeFilter.xml")
     effort = 'max'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
 
 task pmd(type: Pmd) {
     description 'PMD scans Java source code and looks for potential problems'
     group 'verification'
 
-    ignoreFailures = true
-
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
 
     reports {
-        xml.enabled = true
-        html.enabled = false
+        xml.enabled = false
+        html.enabled = true
     }
 }

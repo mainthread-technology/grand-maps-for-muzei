@@ -61,6 +61,8 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
             case ArtSourceService.COMMAND_ID_DEBUG_INFO:
                 artSourceService.displayRefreshInfo(getSharedPreferences());
                 break;
+            default:
+                break;
         }
     }
 

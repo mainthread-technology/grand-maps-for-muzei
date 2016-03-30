@@ -197,6 +197,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
                 nextUpdateTimeMillis += random.nextInt(FIVE_MINS_IN_MILLI_SECONDS);
                 break;
             case RefreshType.RANDOM:
+            default:
                 nextUpdateTimeMillis = preferences.getNextRandomUpdateTime();
                 break;
         }
