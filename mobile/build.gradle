@@ -84,3 +84,4 @@ dependencies {
 }
 
 apply from: '../config/static-analysis.gradle'
+apply from: '../config/test-coverage.gradle'
