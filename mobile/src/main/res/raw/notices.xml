@@ -15,6 +15,20 @@
     </notice>
 
     <notice>
+        <name>OkHttp</name>
+        <url>https://square.github.io/okhttp/</url>
+        <copyright>Copyright 2013 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Gson</name>
+        <url>https://github.com/google/gson</url>
+        <copyright>Copyright 2008 Google Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
         <name>Dagger 2</name>
         <url>https://github.com/google/dagger</url>
         <copyright>Copyright 2012 Google, Inc.&lt;br/&gt;Copyright 2012 Square, Inc.</copyright>
