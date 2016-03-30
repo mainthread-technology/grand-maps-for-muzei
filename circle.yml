@@ -15,6 +15,7 @@ dependencies:
 test:
     override:
         - ./gradlew clean build -PdisablePreDex --stacktrace
+        - ./gradlew mobile:testDebugUnitTestCoverage mobile:testReleaseUnitTestCoverage
     post:
         # Apks
         - mkdir -p $CIRCLE_ARTIFACTS/apk && find . -type f -regex ".*mobile/build/outputs/apk/.*apk" -exec cp {} $CIRCLE_ARTIFACTS/apk/ \;
