@@ -20,7 +20,7 @@ public class AppUpdateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Intent.ACTION_PACKAGE_REPLACED.equals(intent.getAction())) {
+        if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) {
             GrandMapsApp.get(context).inject(this);
 
             Timber.d("On app updated");

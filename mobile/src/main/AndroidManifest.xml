@@ -44,10 +44,7 @@
 
         <receiver android:name=".service.AppUpdateReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data
-                    android:path="technology.mainthread.apps.grandmaps"
-                    android:scheme="package" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
 
