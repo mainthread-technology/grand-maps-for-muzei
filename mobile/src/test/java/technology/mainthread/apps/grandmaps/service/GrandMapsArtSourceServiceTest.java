@@ -250,7 +250,7 @@ public class GrandMapsArtSourceServiceTest {
         UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
 
         // Then
-        int twentyFiveMins = 10 * 60 * 1000;
+        int twentyFiveMins = 25 * 60 * 1000;
         assertTrue(artResponse.getNextUpdateTime() > 0);
         assertTrue(artResponse.getNextUpdateTime() < twentyFiveMins);
         assertNull(artResponse.getArtwork());
