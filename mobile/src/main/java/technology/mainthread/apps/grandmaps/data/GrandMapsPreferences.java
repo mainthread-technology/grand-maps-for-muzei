@@ -40,7 +40,7 @@ public class GrandMapsPreferences {
     public String getClientId() {
         String keyClientId = resources.getString(R.string.key_client_id);
         String id = preferences.getString(keyClientId, null);
-        if (id == null || id.isEmpty()) {
+        if (id == null) {
             id = UUID.randomUUID().toString();
             preferences.edit().putString(keyClientId, id).apply();
         }
@@ -58,7 +58,10 @@ public class GrandMapsPreferences {
     }
 
     public void resetRetryCount() {
-        resetRetry(resources.getString(R.string.key_retry));
+        String key = resources.getString(R.string.key_retry);
+        if (preferences.contains(key)) {
+            preferences.edit().remove(key).apply();
+        }
     }
 
     private int incrementRetry(String key) {
@@ -66,12 +69,6 @@ public class GrandMapsPreferences {
         current++;
         preferences.edit().putInt(key, current).apply();
         return current;
-    }
-
-    private void resetRetry(String key) {
-        if (preferences.contains(key)) {
-            preferences.edit().remove(key).apply();
-        }
     }
 
 }
