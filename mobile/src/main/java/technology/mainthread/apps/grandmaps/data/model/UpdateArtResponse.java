@@ -38,13 +38,13 @@ public class UpdateArtResponse {
         private Builder() {
         }
 
-        public Builder artwork(Artwork val) {
-            artwork = val;
+        public Builder artwork(Artwork artwork) {
+            this.artwork = artwork;
             return this;
         }
 
-        public Builder nextUpdateTime(long val) {
-            nextUpdateTime = val;
+        public Builder nextUpdateTime(long nextUpdateTime) {
+            this.nextUpdateTime = nextUpdateTime;
             return this;
         }
 

@@ -85,38 +85,38 @@ public class GrandMapsResponse {
         private Builder() {
         }
 
-        public Builder id(String val) {
-            id = val;
+        public Builder id(String id) {
+            this.id = id;
             return this;
         }
 
-        public Builder title(String val) {
-            title = val;
+        public Builder title(String title) {
+            this.title = title;
             return this;
         }
 
-        public Builder author(String val) {
-            author = val;
+        public Builder author(String author) {
+            this.author = author;
             return this;
         }
 
-        public Builder year(int val) {
-            year = val;
+        public Builder year(int year) {
+            this.year = year;
             return this;
         }
 
-        public Builder imageAddress(String val) {
-            imageAddress = val;
+        public Builder imageAddress(String imageAddress) {
+            this.imageAddress = imageAddress;
             return this;
         }
 
-        public Builder referenceAddress(String val) {
-            referenceAddress = val;
+        public Builder referenceAddress(String referenceAddress) {
+            this.referenceAddress = referenceAddress;
             return this;
         }
 
-        public Builder nextUpdate(long val) {
-            nextUpdate = val;
+        public Builder nextUpdate(long nextUpdate) {
+            this.nextUpdate = nextUpdate;
             return this;
         }
 
