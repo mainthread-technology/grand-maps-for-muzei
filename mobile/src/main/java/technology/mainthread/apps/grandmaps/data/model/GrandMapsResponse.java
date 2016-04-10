@@ -1,22 +1,22 @@
 package technology.mainthread.apps.grandmaps.data.model;
 
-import com.google.gson.annotations.SerializedName;
+import com.squareup.moshi.Json;
 
 public class GrandMapsResponse {
 
-    @SerializedName("Id")
+    @Json(name = "Id")
     private String id;
-    @SerializedName("Title")
+    @Json(name = "Title")
     private String title;
-    @SerializedName("Author")
+    @Json(name = "Author")
     private String author;
-    @SerializedName("Year")
+    @Json(name = "Year")
     private int year;
-    @SerializedName("ImageAddress")
+    @Json(name = "ImageAddress")
     private String imageAddress;
-    @SerializedName("ReferenceAddress")
+    @Json(name = "ReferenceAddress")
     private String referenceAddress;
-    @SerializedName("NextUpdate")
+    @Json(name = "NextUpdate")
     private long nextUpdate;
 
     private GrandMapsResponse(Builder builder) {
