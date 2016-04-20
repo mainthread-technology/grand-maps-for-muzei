@@ -17,7 +17,7 @@ public class GrandMapsResponse {
     @Json(name = "ReferenceAddress")
     private String referenceAddress;
     @Json(name = "NextUpdate")
-    private long nextUpdate;
+    private Long nextUpdate;
 
     private GrandMapsResponse(Builder builder) {
         id = builder.id;
@@ -70,6 +70,9 @@ public class GrandMapsResponse {
     }
 
     public long getNextUpdate() {
+        if (nextUpdate ==  null) {
+            return 0L;
+        }
         return nextUpdate;
     }
 
