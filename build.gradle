@@ -74,7 +74,7 @@ subprojects {
         compileAndTargetSdkLevel = 23
         minSdkLevel = 17
         supportLibraryVersion = '23.3.0'
-        daggerVersion = '2.2'
+        daggerVersion = '2.4'
     }
 }
 
