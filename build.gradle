@@ -66,8 +66,8 @@ subprojects {
         }
 
         versionMajor = 1
-        versionMinor = 15
-        versionPatch = 2
+        versionMinor = 16
+        versionPatch = 0
         versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
         buildTools = "23.0.3"
