@@ -127,11 +127,11 @@ public class GrandMapsArtSourceService implements ArtSourceService {
                         .nextUpdateTime(getNextUpdateTime(responseBody.getNextUpdate() * 1000L))
                         .build();
             } else {
-                Timber.w("Network error, code: %d, message: %s", response.code(), response.message());
+                Timber.e("Network error, code: %d, message: %s", response.code(), response.message());
                 return handleError();
             }
         } catch (IOException e) {
-            Timber.e(e, "Retrofit Error");
+            Timber.w(e, "Retrofit Error");
             return handleError();
         }
     }
