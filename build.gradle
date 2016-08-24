@@ -62,7 +62,7 @@ subprojects {
         }
 
         versionMajor = 1
-        versionMinor = 16
+        versionMinor = 17
         versionPatch = 0
         versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
