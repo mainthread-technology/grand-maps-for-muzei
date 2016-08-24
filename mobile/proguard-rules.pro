@@ -1,3 +1,5 @@
+-keepattributes EnclosingMethod
+
 # Retrofit, OkHttp, Gson
 -keepattributes *Annotation*
 -keepattributes Signature

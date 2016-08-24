@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 if (file('fabric.properties').exists()) {
     apply plugin: 'io.fabric'
 }
@@ -54,25 +53,25 @@ dependencies {
 
     // Dagger 2
     compile "com.google.dagger:dagger:${daggerVersion}"
-    apt "com.google.dagger:dagger-compiler:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
     provided "javax.annotation:jsr250-api:1.0"
 
     // Support
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
 
     // Network
-    compile "com.squareup.retrofit2:retrofit:2.0.2"
-    compile "com.squareup.retrofit2:converter-moshi:2.0.2"
-    compile "com.squareup.okhttp3:okhttp:3.3.1"
-    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    compile "com.squareup.retrofit2:retrofit:2.1.0"
+    compile "com.squareup.retrofit2:converter-moshi:2.1.0"
+    compile "com.squareup.okhttp3:okhttp:3.4.1"
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.moshi:moshi:1.2.0'
 
     // Other
-    compile "com.jakewharton.timber:timber:4.1.2"
+    compile "com.jakewharton.timber:timber:4.3.0"
     compile('de.psdev.licensesdialog:licensesdialog:1.8.1') {
         exclude module: 'support-v4'
     }
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
 

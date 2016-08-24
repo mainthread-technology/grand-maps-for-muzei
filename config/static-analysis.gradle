@@ -18,7 +18,7 @@ task checkstyle(type: Checkstyle) {
     showViolations true
 }
 
-task findbugs(type: FindBugs, dependsOn: assembleDebug) {
+task findbugs(type: FindBugs, dependsOn: assemble) {
     description 'Finds bugs'
     group 'verification'
 
