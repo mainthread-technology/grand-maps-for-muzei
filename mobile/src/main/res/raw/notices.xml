@@ -15,16 +15,16 @@
     </notice>
 
     <notice>
-        <name>OkHttp</name>
+        <name>OkHttp3</name>
         <url>https://square.github.io/okhttp/</url>
         <copyright>Copyright 2013 Square, Inc.</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
 
     <notice>
-        <name>Gson</name>
-        <url>https://github.com/google/gson</url>
-        <copyright>Copyright 2008 Google Inc.</copyright>
+        <name>Moshi</name>
+        <url>https://github.com/square/moshi</url>
+        <copyright>Copyright 2015 Square, Inc.</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
 
