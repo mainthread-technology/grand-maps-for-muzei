@@ -1,4 +1,7 @@
 machine:
+  java:
+    version: openjdk8
+
     environment:
         _JAVA_OPTIONS: "-Xms512m -Xmx2048m"
         GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms512m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -XX:MaxPermSize=512M"'
