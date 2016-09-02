@@ -24,13 +24,6 @@ public class UpdateArtResponse {
         return new Builder();
     }
 
-    public static Builder builder(UpdateArtResponse copy) {
-        Builder builder = new Builder();
-        builder.artwork = copy.artwork;
-        builder.nextUpdateTime = copy.nextUpdateTime;
-        return builder;
-    }
-
     public static final class Builder {
         private Artwork artwork;
         private long nextUpdateTime;
