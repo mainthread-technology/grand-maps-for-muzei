@@ -85,7 +85,7 @@ public class ConvertPreferencesTest {
         when(preferences.getAll()).thenAnswer(new Answer<Map<String, ?>>() {
             @Override
             public Map<String, ?> answer(InvocationOnMock invocation) throws Throwable {
-                return getMap(Integer.valueOf(123));
+                return getMap(123);
             }
         });
 
