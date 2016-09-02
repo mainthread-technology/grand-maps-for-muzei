@@ -148,7 +148,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(Response.success(apiResponse));
 
         // When
-        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
 
         // Then
         verify(api).getImages();
@@ -164,7 +164,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(Response.<ImageListResponse>success(null));
 
         // When
-        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
     }
 
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
@@ -174,7 +174,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(Response.success(ImageListResponse.builder().build()));
 
         // When
-        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
     }
 
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
@@ -184,7 +184,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(Response.success(ImageListResponse.builder().images(Collections.<ImageResponse>emptyList()).build()));
 
         // When
-        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
     }
 
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
@@ -195,7 +195,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
-        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
     }
 
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
@@ -206,7 +206,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
-        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
     }
 
     @Test
@@ -217,7 +217,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
-        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
 
         // Then
         int twentyFiveMins = 25 * 60 * 1000;
@@ -234,7 +234,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
-        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
 
         // Then
         int twelveHours = 12 * 60 * 60 * 1000;
@@ -250,7 +250,7 @@ public class GrandMapsArtSourceServiceTest {
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
-        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
 
         // Then
         int twentyFourHours = 24 * 60 * 60 * 1000;

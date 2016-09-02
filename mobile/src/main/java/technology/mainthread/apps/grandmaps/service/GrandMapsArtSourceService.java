@@ -90,7 +90,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     }
 
     @Override
-    public UpdateArtResponse updateArt(int reason, Artwork currentArtwork) throws RemoteMuzeiArtSource.RetryException {
+    public UpdateArtResponse updateArt(int reason) throws RemoteMuzeiArtSource.RetryException {
         if (reason != MuzeiArtSource.UPDATE_REASON_USER_NEXT && preferences.onlyUpdateOnWifi()
                 && !connectivityHelper.isConnectedToWifi()) {
             Timber.d("only update on wifi, skipping");
