@@ -14,14 +14,11 @@ import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    private final Preference.OnPreferenceChangeListener frequencyPrefChangedListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String newValueString = (String) newValue;
-            onFrequencyPreferenceChanged(preference, newValueString);
-            setFrequencyChanged(Integer.parseInt(newValueString));
-            return true;
-        }
+    private final Preference.OnPreferenceChangeListener frequencyPrefChangedListener = (preference, newValue) -> {
+        String newValueString = (String) newValue;
+        onFrequencyPreferenceChanged(preference, newValueString);
+        setFrequencyChanged(Integer.parseInt(newValueString));
+        return true;
     };
 
     private int originalFrequency;
@@ -52,12 +49,9 @@ public class SettingsFragment extends PreferenceFragment {
         onFrequencyPreferenceChanged(frequencyPref, frequencyPref.getValue());
 
         frequencyPref.setOnPreferenceChangeListener(frequencyPrefChangedListener);
-        findPreference(getString(R.string.key_os_licences)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                showLicencesDialog();
-                return true;
-            }
+        findPreference(getString(R.string.key_os_licences)).setOnPreferenceClickListener(preference -> {
+            showLicencesDialog();
+            return true;
         });
 
         setupVersionName();
