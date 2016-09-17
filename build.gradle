@@ -61,8 +61,8 @@ subprojects {
             apiProps.load(new FileInputStream(file(localProps['api.props.file'])))
         }
 
-        versionMajor = 1
-        versionMinor = 17
+        versionMajor = 2
+        versionMinor = 0
         versionPatch = 0
         versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
