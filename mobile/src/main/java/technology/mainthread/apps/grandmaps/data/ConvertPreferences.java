@@ -14,8 +14,8 @@ public class ConvertPreferences {
 
     private static final String KEY_PREF_CHECKED = "KEY_PREF_CHECKED";
 
-    private Resources resources;
-    private SharedPreferences preferences;
+    private final Resources resources;
+    private final SharedPreferences preferences;
 
     @Inject
     public ConvertPreferences(Resources resources, SharedPreferences preferences) {

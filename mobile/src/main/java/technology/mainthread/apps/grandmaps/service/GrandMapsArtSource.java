@@ -71,7 +71,7 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
 
     @Override
     protected void onTryUpdate(int reason) throws RetryException {
-        UpdateArtResponse response = artSourceService.updateArt(reason, getCurrentArtwork());
+        UpdateArtResponse response = artSourceService.updateArt(reason);
 
         if (response.getArtwork() != null) {
             publishArtwork(response.getArtwork());

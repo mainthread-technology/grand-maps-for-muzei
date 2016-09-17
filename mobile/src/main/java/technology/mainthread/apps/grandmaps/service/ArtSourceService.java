@@ -33,10 +33,9 @@ public interface ArtSourceService {
      * Updates the next map
      *
      * @param reason         muzei reason for updating
-     * @param currentArtwork current artwork that is being shown
      * @return {@link UpdateArtResponse} - container object
      */
-    UpdateArtResponse updateArt(int reason, Artwork currentArtwork) throws RemoteMuzeiArtSource.RetryException;
+    UpdateArtResponse updateArt(int reason) throws RemoteMuzeiArtSource.RetryException;
 
     /**
      * Share the passed in artwork

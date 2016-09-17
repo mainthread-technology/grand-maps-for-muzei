@@ -13,7 +13,7 @@ public class GrandMapsPreferences {
 
     private final SharedPreferences preferences;
     private final Resources resources;
-    private Clock clock;
+    private final Clock clock;
 
     @Inject
     public GrandMapsPreferences(SharedPreferences preferences, Resources resources, Clock clock) {
