@@ -18,10 +18,10 @@ Grand Maps for Muzei is a cartography themed extension for the Muzei live-wallpa
 4. Select "Grand Maps" as your source
 5. Done!
 
-## The previous Api for Grand Maps
+## The API for Grand Maps
 The previous service and admin console can be found in this repo: [github.com/mainthread-technology/grand-maps-for-muzei-service](https://github.com/mainthread-technology/grand-maps-for-muzei-service)
 
-We have deployed a simple json file to aws for easy maintenance
+We have deployed a simple json file for easy future maintenance
 
 License
 -------
