@@ -25,4 +25,5 @@
 
 # Application classes that will be serialized/deserialized over Gson
 -keep class technology.mainthread.apps.grandmaps.data.GrandMapsApi { *; }
--keep class technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse { *; }
+-keep class technology.mainthread.apps.grandmaps.data.model.ImageListResponse { *; }
+-keep class technology.mainthread.apps.grandmaps.data.model.ImageResponse { *; }

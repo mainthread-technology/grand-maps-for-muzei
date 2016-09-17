@@ -13,27 +13,10 @@
     <!--Settings-->
     <string name="settings_activity_title">Settings</string>
     <!-- Settings source group -->
-    <string name="key_type">setting_update_type</string>
     <string name="key_frequency">setting_refresh_frequency</string>
     <string name="key_client_id">client_id</string>
     <string name="key_retry">key_retry</string>
-
-    <!-- Source type -->
     <string name="group_title_feed">Source</string>
-    <string name="preference_title_type">Source</string>
-
-    <string-array name="type_names">
-        <item>Daily Featured</item>
-        <item>Random</item>
-    </string-array>
-
-    <string name="type_value_featured">TYPE_FEATURED</string>
-    <string name="type_value_random">TYPE_RANDOM</string>
-
-    <string-array name="type_values">
-        <item>@string/type_value_featured</item>
-        <item>@string/type_value_random</item>
-    </string-array>
 
     <!-- refresh time -->
     <string name="preference_title_frequency">Refresh Period</string>
@@ -68,7 +51,7 @@
     <string name="key_build_number">setting_build_number</string>
     <string name="key_feedback">setting_feedback</string>
     <string name="feedback_title">Contact developer</string>
-    <string name="title_other_apps">Other apps</string>
+    <string name="title_github">View on GitHub</string>
     <string name="version_title">Version</string>
     <string name="key_os_licences">key_os_licences</string>
     <string name="title_os_licences">Open source licences</string>

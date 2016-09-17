@@ -20,6 +20,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -30,10 +31,10 @@ import technology.mainthread.apps.grandmaps.BuildConfig;
 import technology.mainthread.apps.grandmaps.data.Clock;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
-import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
-import technology.mainthread.apps.grandmaps.data.model.RefreshType;
-import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
 import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
+import technology.mainthread.apps.grandmaps.data.model.ImageListResponse;
+import technology.mainthread.apps.grandmaps.data.model.ImageResponse;
+import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -63,7 +64,7 @@ public class GrandMapsArtSourceServiceTest {
     @Mock
     private ConnectivityHelper connectivityHelper;
     @Mock
-    private Call<GrandMapsResponse> retrofitCall;
+    private Call<ImageListResponse> retrofitCall;
     @Mock
     private Handler handler;
     @Mock
@@ -74,14 +75,13 @@ public class GrandMapsArtSourceServiceTest {
     private Clock clock;
 
     // Stub
-    private final GrandMapsResponse apiResponse = GrandMapsResponse.builder()
-            .title("Title")
+    private final ImageResponse image = ImageResponse.builder()
+            .title("title")
             .author("author")
-            .id("id")
-            .imageAddress("image")
-            .referenceAddress("ref")
-            .nextUpdate(120)
+            .imageUrl("imageUri")
+            .referenceUrl("ref")
             .build();
+    private final ImageListResponse apiResponse = ImageListResponse.builder().images(Collections.singletonList(image)).build();
     private Artwork artwork;
 
     private GrandMapsArtSourceService sut;
@@ -91,20 +91,18 @@ public class GrandMapsArtSourceServiceTest {
         // Uri
         PowerMockito.mockStatic(Uri.class);
         PowerMockito.when(Uri.class, "parse", anyString()).thenReturn(uri);
+        when(uri.toString()).thenReturn("imageUri");
         // Intent
         PowerMockito.whenNew(Intent.class).withArguments(anyString()).thenReturn(intent);
         PowerMockito.mockStatic(Intent.class);
         PowerMockito.when(Intent.class, "createChooser", eq(intent), anyString()).thenReturn(intent);
 
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
-        when(api.getFeatured()).thenReturn(retrofitCall);
-        when(api.getRandom(anyString())).thenReturn(retrofitCall);
+        when(api.getImages()).thenReturn(retrofitCall);
         when(intent.getDataString()).thenReturn("data string");
         when(clock.currentTimeMillis()).thenReturn(0L);
 
         artwork = new Artwork.Builder()
                 .title("title")
-                .token("token")
                 .byline("byline")
                 .imageUri(uri)
                 .viewIntent(intent)
@@ -114,25 +112,7 @@ public class GrandMapsArtSourceServiceTest {
     }
 
     @Test
-    public void getUserCommandsIfFeatured() {
-        // When
-        List<UserCommand> userCommands = sut.getUserCommands();
-
-        // Then
-        assertEquals(BuildConfig.DEBUG ? 2 : 1, userCommands.size());
-        if (BuildConfig.DEBUG) {
-            assertEquals(ArtSourceService.COMMAND_ID_DEBUG_INFO, userCommands.get(0).getId());
-            assertEquals(ArtSourceService.COMMAND_ID_SHARE, userCommands.get(1).getId());
-        } else {
-            assertEquals(ArtSourceService.COMMAND_ID_SHARE, userCommands.get(0).getId());
-        }
-    }
-
-    @Test
-    public void getUserCommandsIfRandom() {
-        // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.RANDOM);
-
+    public void getUserCommands() {
         // When
         List<UserCommand> userCommands = sut.getUserCommands();
 
@@ -149,66 +129,59 @@ public class GrandMapsArtSourceServiceTest {
     }
 
     @Test
-    public void getNewRandomUpdateTime() {
+    public void getNextUpdateTime() {
         // Given
-        when(preferences.getNextRandomUpdateTime()).thenReturn(123L);
-        when(preferences.getRefreshType()).thenReturn(RefreshType.RANDOM);
+        when(preferences.getNextUpdateTime()).thenReturn(123L);
 
         // When
-        long retval = sut.getNewRandomUpdateTime();
+        long retval = sut.getNextUpdateTime();
 
         // Then
         assertEquals(123L, retval);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void getNewRandomUpdateTimeInFeaturedMode() {
-        // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
-
-        // When
-        sut.getNewRandomUpdateTime();
-    }
-
     @Test
-    public void updateArtFeaturedIsSuccessful() throws Exception {
+    public void updateArtIsSuccessful() throws Exception {
         // Given
+        long nextUpdateTime = 123L;
+        when(preferences.getNextUpdateTime()).thenReturn(nextUpdateTime);
         when(retrofitCall.execute()).thenReturn(Response.success(apiResponse));
 
         // When
         UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
 
         // Then
-        verify(api).getFeatured();
+        verify(api).getImages();
         verify(preferences).resetRetryCount();
         verifyArtResponse(artResponse);
-        assertTrue(artResponse.getNextUpdateTime() > 0L);
-    }
-
-    @Test
-    public void updateArtRandomIsSuccessful() throws Exception {
-        // Given
-        long nextRandomUpdateTime = 123L;
-        when(preferences.getNextRandomUpdateTime()).thenReturn(nextRandomUpdateTime);
-        when(preferences.getRefreshType()).thenReturn(RefreshType.RANDOM);
-        when(retrofitCall.execute()).thenReturn(Response.success(apiResponse));
-
-        // When
-        UpdateArtResponse artResponse = sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
-
-        // Then
-        verify(api).getRandom(artwork.getToken());
-        verify(preferences).resetRetryCount();
-        verifyArtResponse(artResponse);
-        assertEquals(nextRandomUpdateTime, artResponse.getNextUpdateTime());
+        assertEquals(nextUpdateTime, artResponse.getNextUpdateTime());
     }
 
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
-    public void updateArtThrowsWhenImageUriIsNull() throws Exception {
+    public void updateArtThrowsWhenResponseIsNull() throws Exception {
         // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
         when(preferences.getRetryCount()).thenReturn(0);
-        when(retrofitCall.execute()).thenReturn(Response.success(GrandMapsResponse.builder().build()));
+        when(retrofitCall.execute()).thenReturn(Response.<ImageListResponse>success(null));
+
+        // When
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+    }
+
+    @Test(expected = RemoteMuzeiArtSource.RetryException.class)
+    public void updateArtThrowsWhenImagesNull() throws Exception {
+        // Given
+        when(preferences.getRetryCount()).thenReturn(0);
+        when(retrofitCall.execute()).thenReturn(Response.success(ImageListResponse.builder().build()));
+
+        // When
+        sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
+    }
+
+    @Test(expected = RemoteMuzeiArtSource.RetryException.class)
+    public void updateArtThrowsWhenImagesEmpty() throws Exception {
+        // Given
+        when(preferences.getRetryCount()).thenReturn(0);
+        when(retrofitCall.execute()).thenReturn(Response.success(ImageListResponse.builder().images(Collections.<ImageResponse>emptyList()).build()));
 
         // When
         sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER, artwork);
@@ -217,9 +190,8 @@ public class GrandMapsArtSourceServiceTest {
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
     public void updateArtThrowsWhen0Retries() throws Exception {
         // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
         when(preferences.getRetryCount()).thenReturn(0);
-        Response<GrandMapsResponse> error = Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        Response<ImageListResponse> error = Response.error(500, ResponseBody.create(MediaType.parse("text/plain"), ""));
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
@@ -229,9 +201,8 @@ public class GrandMapsArtSourceServiceTest {
     @Test(expected = RemoteMuzeiArtSource.RetryException.class)
     public void updateArtThrowsWhen3Retries() throws Exception {
         // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
         when(preferences.getRetryCount()).thenReturn(3);
-        Response<GrandMapsResponse> error = Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        Response<ImageListResponse> error = Response.error(400, ResponseBody.create(MediaType.parse("text/plain"), ""));
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
@@ -241,9 +212,8 @@ public class GrandMapsArtSourceServiceTest {
     @Test
     public void updateArtDoesNotThrowAndSchedulesUpdateMoreThan5MinsInFuture() throws Exception {
         // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
         when(preferences.getRetryCount()).thenReturn(5);
-        Response<GrandMapsResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        Response<ImageListResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
@@ -259,9 +229,8 @@ public class GrandMapsArtSourceServiceTest {
     @Test
     public void updateArtDoesNotThrowAndSchedulesUpdate12HoursInFuture() throws Exception {
         // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
         when(preferences.getRetryCount()).thenReturn(8);
-        Response<GrandMapsResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        Response<ImageListResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
@@ -276,9 +245,8 @@ public class GrandMapsArtSourceServiceTest {
     @Test
     public void updateArtDoesNotThrowAndSchedulesUpdate24HoursInFuture() throws Exception {
         // Given
-        when(preferences.getRefreshType()).thenReturn(RefreshType.FEATURED);
         when(preferences.getRetryCount()).thenReturn(12);
-        Response<GrandMapsResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
+        Response<ImageListResponse> error = Response.error(404, ResponseBody.create(MediaType.parse("text/plain"), ""));
         when(retrofitCall.execute()).thenReturn(error);
 
         // When
@@ -328,7 +296,7 @@ public class GrandMapsArtSourceServiceTest {
     }
 
     private void verifyArtResponse(UpdateArtResponse artResponse) {
-        assertEquals(apiResponse.getTitle(), artResponse.getArtwork().getTitle());
-        assertEquals(apiResponse.getId(), artResponse.getArtwork().getToken());
+        assertEquals(image.getTitle(), artResponse.getArtwork().getTitle());
+        assertEquals(image.getImageUrl(), artResponse.getArtwork().getImageUri().toString());
     }
 }
