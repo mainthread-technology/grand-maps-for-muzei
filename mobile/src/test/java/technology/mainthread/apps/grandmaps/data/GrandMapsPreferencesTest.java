@@ -10,15 +10,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import technology.mainthread.apps.grandmaps.R;
-import technology.mainthread.apps.grandmaps.data.model.RefreshType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,7 +23,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class GrandMapsPreferencesTest {
 
-    private static final String KEY_TYPE = "key_type";
     private static final String KEY_FREQUENCY = "key_frequency";
     private static final String DEFAULT_REFRESH_FREQUENCY = "24";
     private static final String KEY_CLIENT_ID = "key_client_id";
@@ -47,7 +43,6 @@ public class GrandMapsPreferencesTest {
     @Before
     public void setUp() throws Exception {
 
-        when(resources.getString(R.string.key_type)).thenReturn(KEY_TYPE);
         when(resources.getString(R.string.key_frequency)).thenReturn(KEY_FREQUENCY);
         when(resources.getString(R.string.default_refresh_frequency)).thenReturn(DEFAULT_REFRESH_FREQUENCY);
         when(resources.getString(R.string.key_client_id)).thenReturn(KEY_CLIENT_ID);
@@ -63,56 +58,16 @@ public class GrandMapsPreferencesTest {
     }
 
     @Test
-    public void getRefreshType() throws Exception {
-        // given
-        when(preferences.getString(KEY_TYPE, RefreshType.FEATURED)).thenReturn(RefreshType.FEATURED);
-
-        // when
-        String result = sut.getRefreshType();
-
-        // then
-        assertEquals(RefreshType.FEATURED, result);
-    }
-
-    @Test
-    public void getNextRandomUpdateTime() throws Exception {
+    public void getNextUpdateTime() throws Exception {
         // given
         when(preferences.getString(KEY_FREQUENCY, DEFAULT_REFRESH_FREQUENCY)).thenReturn("123");
 
         // when
-        long result = sut.getNextRandomUpdateTime();
+        long result = sut.getNextUpdateTime();
 
         // then
         long expected = 123L * 60L * 60L * 1000L;
         assertEquals(expected, result);
-    }
-
-    @Test
-    public void getClientIdHasId() throws Exception {
-        // given
-        String clientId = "client_id";
-        when(preferences.getString(KEY_CLIENT_ID, null)).thenReturn(clientId);
-
-        // when
-        String result = sut.getClientId();
-
-        // then
-        assertEquals(clientId, result);
-    }
-
-    @Test
-    public void getClientIdDoesNotHaveId() throws Exception {
-        // given
-        when(preferences.getString(KEY_CLIENT_ID, null)).thenReturn(null);
-
-        // when
-        String result = sut.getClientId();
-
-        // then
-        verify(preferences).edit();
-        verify(editor).putString(eq(KEY_CLIENT_ID), anyString());
-        verify(editor).apply();
-        assertNotNull(result);
     }
 
     @Test

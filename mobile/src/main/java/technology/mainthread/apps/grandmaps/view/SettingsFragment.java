@@ -10,26 +10,22 @@ import android.preference.PreferenceFragment;
 
 import de.psdev.licensesdialog.LicensesDialog;
 import technology.mainthread.apps.grandmaps.R;
-import technology.mainthread.apps.grandmaps.data.model.RefreshType;
+import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
 
 public class SettingsFragment extends PreferenceFragment {
-
-    private final Preference.OnPreferenceChangeListener typePrefChangedListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            onTypePreferenceChanged(newValue);
-            return true;
-        }
-    };
 
     private final Preference.OnPreferenceChangeListener frequencyPrefChangedListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            onFrequencyPreferenceChanged(preference, (String) newValue);
+            String newValueString = (String) newValue;
+            onFrequencyPreferenceChanged(preference, newValueString);
+            setFrequencyChanged(Integer.parseInt(newValueString));
             return true;
         }
     };
-    private ListPreference frequencyPref;
+
+    private int originalFrequency;
+    private boolean frequencyChanged;
 
     public static Fragment newInstance() {
         return new SettingsFragment();
@@ -42,14 +38,19 @@ public class SettingsFragment extends PreferenceFragment {
         initializePreferences();
     }
 
-    private void initializePreferences() {
-        frequencyPref = (ListPreference) findPreference(getResources().getString(R.string.key_frequency));
-        ListPreference typePref = (ListPreference) findPreference(getResources().getString(R.string.key_type));
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (frequencyChanged) {
+            getActivity().startService(GrandMapsArtSource.getGrandMapArtSourceIntent(getActivity(), true));
+        }
+    }
 
-        onTypePreferenceChanged(typePref.getValue());
+    private void initializePreferences() {
+        ListPreference frequencyPref = (ListPreference) findPreference(getResources().getString(R.string.key_frequency));
+        originalFrequency = Integer.parseInt(frequencyPref.getValue());
         onFrequencyPreferenceChanged(frequencyPref, frequencyPref.getValue());
 
-        typePref.setOnPreferenceChangeListener(typePrefChangedListener);
         frequencyPref.setOnPreferenceChangeListener(frequencyPrefChangedListener);
         findPreference(getString(R.string.key_os_licences)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -72,13 +73,13 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    private void onTypePreferenceChanged(Object newValue) {
-        frequencyPref.setEnabled(!RefreshType.FEATURED.equals(newValue));
-    }
-
     private void onFrequencyPreferenceChanged(Preference preference, String newValue) {
         int frequency = Integer.parseInt(newValue);
         preference.setSummary(getResources().getQuantityString(R.plurals.refresh_frequency_summary, frequency, frequency));
+    }
+
+    private void setFrequencyChanged(int newValue) {
+        frequencyChanged = originalFrequency != newValue;
     }
 
     private void showLicencesDialog() {

@@ -5,33 +5,31 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
 
-import java.io.IOException;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.Interceptor;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 import technology.mainthread.apps.grandmaps.BuildConfig;
+import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.data.Clock;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
-import technology.mainthread.apps.grandmaps.R;
-import technology.mainthread.apps.grandmaps.service.ArtSourceService;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
-import technology.mainthread.apps.grandmaps.service.GrandMapsArtSourceService;
 import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
+import technology.mainthread.apps.grandmaps.service.ArtSourceService;
+import technology.mainthread.apps.grandmaps.service.GrandMapsArtSourceService;
 
 @Module
 public class GrandMapsApiModule {
 
     private final Context context;
     private final Resources resources;
+
+    private static final long CACHE_SIZE = 1024L * 1024L; //  1 MB
 
     public GrandMapsApiModule(Application application) {
         this.context = application.getApplicationContext();
@@ -40,24 +38,14 @@ public class GrandMapsApiModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient(final GrandMapsPreferences preferences) {
+    OkHttpClient provideOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        builder.cache(new Cache(context.getCacheDir(), CACHE_SIZE));
 
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(new HttpLoggingInterceptor());
         }
-
-        builder.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request().newBuilder()
-                        .addHeader("Authentication", resources.getString(R.string.api_key))
-                        .addHeader("X-Client-ID", preferences.getClientId())
-                        .build();
-
-                return chain.proceed(request);
-            }
-        });
 
         return builder.build();
     }

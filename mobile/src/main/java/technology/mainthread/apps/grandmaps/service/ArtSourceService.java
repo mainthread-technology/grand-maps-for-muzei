@@ -23,11 +23,11 @@ public interface ArtSourceService {
     List<UserCommand> getUserCommands();
 
     /**
-     * Gets the next update time depending on the {@link technology.mainthread.apps.grandmaps.data.model.RefreshType}
+     * Gets the next update time
      *
      * @return time in milli seconds to next update
      */
-    long getNewRandomUpdateTime();
+    long getNextUpdateTime();
 
     /**
      * Updates the next map

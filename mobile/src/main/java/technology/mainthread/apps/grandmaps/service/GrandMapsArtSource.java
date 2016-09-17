@@ -17,7 +17,7 @@ import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
  */
 public class GrandMapsArtSource extends RemoteMuzeiArtSource {
 
-    public static final String ACTION_QUEUE_RANDOM_REFRESH = "action_queue_random_refresh";
+    private static final String ACTION_FREQUENCY_CHANGED = "ACTION_FREQUENCY_CHANGED";
 
     @Inject
     ArtSourceService artSourceService;
@@ -26,8 +26,12 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
         super(GrandMapsArtSource.class.getSimpleName());
     }
 
-    public static Intent getGrandMapArtSourceIntent(Context context) {
-        return new Intent(context, GrandMapsArtSource.class);
+    public static Intent getGrandMapArtSourceIntent(Context context, boolean frequencyChanged) {
+        Intent intent = new Intent(context, GrandMapsArtSource.class);
+        if (frequencyChanged) {
+            intent.setAction(GrandMapsArtSource.ACTION_FREQUENCY_CHANGED);
+        }
+        return intent;
     }
 
     @Override
@@ -43,10 +47,9 @@ public class GrandMapsArtSource extends RemoteMuzeiArtSource {
     protected void onHandleIntent(Intent intent) {
         super.onHandleIntent(intent);
 
-        // Use extra from intent?
         String action = intent.getAction();
-        if (ACTION_QUEUE_RANDOM_REFRESH.equals(action)) {
-            scheduleUpdate(artSourceService.getNewRandomUpdateTime());
+        if (ACTION_FREQUENCY_CHANGED.equals(action)) {
+            scheduleUpdate(artSourceService.getNextUpdateTime());
         }
     }
 

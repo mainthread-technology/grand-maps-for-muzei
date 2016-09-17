@@ -14,7 +14,6 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         resValue 'string', 'api_endpoint', apiProps["endpoint"] != null ? apiProps["endpoint"] : ''
-        resValue 'string', 'api_key', apiProps["key"] != null ? apiProps["key"] : ''
 
         resConfigs "en"
     }

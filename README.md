@@ -7,9 +7,9 @@ Grand Maps for Muzei is a cartography themed extension for the Muzei live-wallpa
 [Join](https://play.google.com/apps/testing/technology.mainthread.apps.grandmaps) the open beta to be the first to see updates.
 
 ## Features
-* A featured cartography themed wallpaper every day!
-* Or a random map with a custom refresh interval
-* Skip to the next random map manually
+* A cartography themed wallpaper, updated when you want
+* Skip to the next map
+* Download on Wifi only
 
 ## How to Use
 1. Install Muzei @ http://get.muzei.co
@@ -18,8 +18,10 @@ Grand Maps for Muzei is a cartography themed extension for the Muzei live-wallpa
 4. Select "Grand Maps" as your source
 5. Done!
 
-## The Api for Grand Maps
-The service and admin console can be found in this repo: [github.com/mainthread-technology/grand-maps-for-muzei-service](https://github.com/mainthread-technology/grand-maps-for-muzei-service)
+## The previous Api for Grand Maps
+The previous service and admin console can be found in this repo: [github.com/mainthread-technology/grand-maps-for-muzei-service](https://github.com/mainthread-technology/grand-maps-for-muzei-service)
+
+We have deployed a simple json file to aws for easy maintenance
 
 License
 -------

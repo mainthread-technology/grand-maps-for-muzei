@@ -28,8 +28,8 @@ import technology.mainthread.apps.grandmaps.data.Clock;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
 import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
-import technology.mainthread.apps.grandmaps.data.model.GrandMapsResponse;
-import technology.mainthread.apps.grandmaps.data.model.RefreshType;
+import technology.mainthread.apps.grandmaps.data.model.ImageListResponse;
+import technology.mainthread.apps.grandmaps.data.model.ImageResponse;
 import technology.mainthread.apps.grandmaps.data.model.UpdateArtResponse;
 import timber.log.Timber;
 
@@ -79,20 +79,14 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         }
 
         commands.add(new UserCommand(COMMAND_ID_SHARE, resources.getString(R.string.action_share)));
+        commands.add(new UserCommand(MuzeiArtSource.BUILTIN_COMMAND_ID_NEXT_ARTWORK));
 
-        if (RefreshType.RANDOM.equals(preferences.getRefreshType())) {
-            commands.add(new UserCommand(MuzeiArtSource.BUILTIN_COMMAND_ID_NEXT_ARTWORK));
-        }
         return commands;
     }
 
     @Override
-    public long getNewRandomUpdateTime() {
-        if (RefreshType.FEATURED.equals(preferences.getRefreshType())) {
-            throw new RuntimeException("Cannot request random update time if using featured mode");
-        }
-
-        return getNextUpdateTime(0L);
+    public long getNextUpdateTime() {
+        return preferences.getNextUpdateTime();
     }
 
     @Override
@@ -106,25 +100,23 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         }
 
         try {
-            Response<GrandMapsResponse> response;
-            if (RefreshType.RANDOM.equals(preferences.getRefreshType())) {
-                String currentToken = currentArtwork != null ? currentArtwork.getToken() : "";
-                response = api.getRandom(currentToken).execute();
-            } else {
-                response = api.getFeatured().execute();
-            }
+            Response<ImageListResponse> response = api.getImages().execute();
 
             if (response.isSuccessful()) {
-                GrandMapsResponse responseBody = response.body();
-                if (responseBody == null || responseBody.getImageAddress() == null) {
+                ImageListResponse responseBody = response.body();
+                if (responseBody == null
+                        || responseBody.getImages() == null
+                        || responseBody.getImages().isEmpty()) {
                     return handleError();
                 }
+
+                ImageResponse randomImage = getRandomImage(responseBody.getImages());
 
                 preferences.resetRetryCount();
 
                 return UpdateArtResponse.builder()
-                        .artwork(convertResponseToArtwork(responseBody))
-                        .nextUpdateTime(getNextUpdateTime(responseBody.getNextUpdate() * 1000L))
+                        .artwork(convertResponseToArtwork(randomImage))
+                        .nextUpdateTime(getNextUpdateTime())
                         .build();
             } else {
                 Timber.e("Network error, code: %d, message: %s", response.code(), response.message());
@@ -163,13 +155,22 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         displayToast("Next update time: " + dateFormat.format(new Date(nextUpdateTimeMillis)));
     }
 
-    private Artwork convertResponseToArtwork(GrandMapsResponse responseBody) {
+    private ImageResponse getRandomImage(List<ImageResponse> images) {
+        if (images ==  null || images.isEmpty()) {
+            return null;
+        }
+
+        int size = images.size();
+        int nextIndex = size > 1 ? random.nextInt(size - 1) : 0;
+        return images.get(nextIndex);
+    }
+
+    private Artwork convertResponseToArtwork(ImageResponse responseBody) {
         return new Artwork.Builder()
                 .title(responseBody.getTitle())
                 .byline(String.format(Locale.ENGLISH, "%s, %d", responseBody.getAuthor(), responseBody.getYear()))
-                .token(responseBody.getId())
-                .imageUri(Uri.parse(responseBody.getImageAddress()))
-                .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(responseBody.getReferenceAddress())))
+                .imageUri(Uri.parse(responseBody.getImageUrl()))
+                .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(responseBody.getReferenceUrl())))
                 .build();
     }
 
@@ -189,20 +190,6 @@ public class GrandMapsArtSourceService implements ArtSourceService {
                     .nextUpdateTime(clock.currentTimeMillis() + nextRetryFromNow)
                     .build();
         }
-    }
-
-    private long getNextUpdateTime(long nextUpdateTimeMillis) {
-        switch (preferences.getRefreshType()) {
-            case RefreshType.FEATURED:
-                nextUpdateTimeMillis += random.nextInt(FIVE_MINS_IN_MILLI_SECONDS);
-                break;
-            case RefreshType.RANDOM:
-            default:
-                nextUpdateTimeMillis = preferences.getNextRandomUpdateTime();
-                break;
-        }
-
-        return nextUpdateTimeMillis;
     }
 
     private void displayToast(final String text) {
