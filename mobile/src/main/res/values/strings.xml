@@ -29,6 +29,7 @@
     <string name="default_refresh_frequency">24</string>
 
     <string-array name="frequency_names">
+        <item>3 Hours</item>
         <item>6 Hours</item>
         <item>12 Hours</item>
         <item>24 Hours</item>
