@@ -161,7 +161,7 @@ public class GrandMapsArtSourceServiceTest {
     public void updateArtThrowsWhenResponseIsNull() throws Exception {
         // Given
         when(preferences.getRetryCount()).thenReturn(0);
-        when(retrofitCall.execute()).thenReturn(Response.<ImageListResponse>success(null));
+        when(retrofitCall.execute()).thenReturn(Response.success(null));
 
         // When
         sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);
@@ -181,7 +181,7 @@ public class GrandMapsArtSourceServiceTest {
     public void updateArtThrowsWhenImagesEmpty() throws Exception {
         // Given
         when(preferences.getRetryCount()).thenReturn(0);
-        when(retrofitCall.execute()).thenReturn(Response.success(ImageListResponse.builder().images(Collections.<ImageResponse>emptyList()).build()));
+        when(retrofitCall.execute()).thenReturn(Response.success(ImageListResponse.builder().images(Collections.emptyList()).build()));
 
         // When
         sut.updateArt(MuzeiArtSource.UPDATE_REASON_OTHER);

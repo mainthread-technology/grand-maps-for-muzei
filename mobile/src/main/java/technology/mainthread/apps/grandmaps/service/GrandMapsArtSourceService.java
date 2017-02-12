@@ -193,11 +193,6 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     }
 
     private void displayToast(final String text) {
-        mainThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, text, Toast.LENGTH_LONG).show();
-            }
-        });
+        mainThreadHandler.post(() -> Toast.makeText(context, text, Toast.LENGTH_LONG).show());
     }
 }

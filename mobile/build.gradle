@@ -16,7 +16,17 @@ android {
         resValue 'string', 'api_endpoint', apiProps["endpoint"] != null ? apiProps["endpoint"] : ''
 
         resConfigs "en"
+
+        jackOptions {
+            enabled true
+        }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 
     signingConfigs {
         release {
@@ -38,7 +48,6 @@ android {
                 signingConfig signingConfigs.release
             }
             minifyEnabled true
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -82,4 +91,3 @@ dependencies {
 }
 
 apply from: '../config/static-analysis.gradle'
-apply from: '../config/test-coverage.gradle'
