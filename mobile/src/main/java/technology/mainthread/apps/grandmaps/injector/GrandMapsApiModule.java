@@ -20,16 +20,16 @@ import technology.mainthread.apps.grandmaps.data.Clock;
 import technology.mainthread.apps.grandmaps.data.ConnectivityHelper;
 import technology.mainthread.apps.grandmaps.data.GrandMapsApi;
 import technology.mainthread.apps.grandmaps.data.GrandMapsPreferences;
+import technology.mainthread.apps.grandmaps.service.Analytics;
 import technology.mainthread.apps.grandmaps.service.ArtSourceService;
 import technology.mainthread.apps.grandmaps.service.GrandMapsArtSourceService;
 
 @Module
 public class GrandMapsApiModule {
 
+    private static final long CACHE_SIZE = 1024L * 1024L; //  1 MB
     private final Context context;
     private final Resources resources;
-
-    private static final long CACHE_SIZE = 1024L * 1024L; //  1 MB
 
     public GrandMapsApiModule(Application application) {
         this.context = application.getApplicationContext();
@@ -63,8 +63,12 @@ public class GrandMapsApiModule {
     }
 
     @Provides
-    ArtSourceService artSourceService(Handler handler, GrandMapsPreferences preferences,
-                                      GrandMapsApi api, ConnectivityHelper connectivityHelper, Clock clock) {
-        return new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper, clock);
+    ArtSourceService artSourceService(Handler handler,
+                                      GrandMapsPreferences preferences,
+                                      GrandMapsApi api,
+                                      ConnectivityHelper connectivityHelper,
+                                      Clock clock,
+                                      Analytics analytics) {
+        return new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper, clock, analytics);
     }
 }

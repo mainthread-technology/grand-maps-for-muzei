@@ -1,19 +1,20 @@
 package technology.mainthread.apps.grandmaps.view;
 
 import android.app.Fragment;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import de.psdev.licensesdialog.LicensesDialog;
+import technology.mainthread.apps.grandmaps.BuildConfig;
 import technology.mainthread.apps.grandmaps.R;
 import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
 
 public class SettingsFragment extends PreferenceFragment {
 
+    private int originalFrequency;
+    private boolean frequencyChanged;
     private final Preference.OnPreferenceChangeListener frequencyPrefChangedListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -23,9 +24,6 @@ public class SettingsFragment extends PreferenceFragment {
             return true;
         }
     };
-
-    private int originalFrequency;
-    private boolean frequencyChanged;
 
     public static Fragment newInstance() {
         return new SettingsFragment();
@@ -65,12 +63,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupVersionName() {
         Preference buildNumber = findPreference(getResources().getString(R.string.key_build_number));
-        try {
-            PackageInfo info = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            buildNumber.setSummary(info.versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            buildNumber.setSummary(getResources().getString(R.string.version_name_error));
-        }
+        buildNumber.setSummary(BuildConfig.VERSION_NAME);
     }
 
     private void onFrequencyPreferenceChanged(Preference preference, String newValue) {

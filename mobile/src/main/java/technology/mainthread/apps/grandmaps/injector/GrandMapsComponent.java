@@ -9,7 +9,7 @@ import technology.mainthread.apps.grandmaps.service.GrandMapsArtSource;
 import technology.mainthread.apps.grandmaps.view.SettingsActivity;
 
 @Singleton
-@Component(modules = {GrandMapsAppModule.class, GrandMapsApiModule.class})
+@Component(modules = {GrandMapsAppModule.class, GrandMapsApiModule.class, ServiceModule.class})
 public interface GrandMapsComponent {
 
     final class Initializer {
@@ -17,6 +17,7 @@ public interface GrandMapsComponent {
             return DaggerGrandMapsComponent.builder()
                     .grandMapsAppModule(new GrandMapsAppModule(app))
                     .grandMapsApiModule(new GrandMapsApiModule(app))
+                    .serviceModule(new ServiceModule(app))
                     .build();
         }
 

@@ -73,6 +73,8 @@ public class GrandMapsArtSourceServiceTest {
     private Intent intent;
     @Mock
     private Clock clock;
+    @Mock
+    private Analytics analytics;
 
     // Stub
     private final ImageResponse image = ImageResponse.builder()
@@ -108,7 +110,7 @@ public class GrandMapsArtSourceServiceTest {
                 .viewIntent(intent)
                 .build();
 
-        sut = new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper, clock);
+        sut = new GrandMapsArtSourceService(context, resources, handler, preferences, api, connectivityHelper, clock, analytics);
     }
 
     @Test

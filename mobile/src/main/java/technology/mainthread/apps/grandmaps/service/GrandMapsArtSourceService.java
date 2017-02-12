@@ -49,6 +49,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
     private final GrandMapsApi api;
     private final ConnectivityHelper connectivityHelper;
     private final Clock clock;
+    private final Analytics analytics;
     private final Random random;
 
     public GrandMapsArtSourceService(
@@ -58,7 +59,8 @@ public class GrandMapsArtSourceService implements ArtSourceService {
             GrandMapsPreferences preferences,
             GrandMapsApi api,
             ConnectivityHelper connectivityHelper,
-            Clock clock) {
+            Clock clock,
+            Analytics analytics) {
         this.context = context;
         this.resources = resources;
         this.mainThreadHandler = mainThreadHandler;
@@ -66,6 +68,7 @@ public class GrandMapsArtSourceService implements ArtSourceService {
         this.api = api;
         this.connectivityHelper = connectivityHelper;
         this.clock = clock;
+        this.analytics = analytics;
         this.random = new Random();
     }
 
@@ -114,6 +117,8 @@ public class GrandMapsArtSourceService implements ArtSourceService {
 
                 preferences.resetRetryCount();
 
+                analytics.artUpdated();
+
                 return UpdateArtResponse.builder()
                         .artwork(convertResponseToArtwork(randomImage))
                         .nextUpdateTime(getNextUpdateTime())
@@ -134,6 +139,8 @@ public class GrandMapsArtSourceService implements ArtSourceService {
             Timber.w("No current artwork, can't share.");
             displayToast(resources.getString(R.string.error_no_map_to_share));
         } else {
+            analytics.artShared(currentArtwork);
+
             String detailUrl = currentArtwork.getViewIntent().getDataString();
             String artist = currentArtwork.getByline().replaceFirst("\\.\\s*($|\\n).*", "").trim();
 
