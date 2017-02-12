@@ -63,8 +63,8 @@ subprojects {
 
         versionMajor = 2
         versionMinor = 1
-        versionPatch = 0
-        versionBuild = 1 // bump for dogfood builds, public betas, etc.
+        versionPatch = 1
+        versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
         buildTools = "25.0.2"
         compileAndTargetSdkLevel = 25
