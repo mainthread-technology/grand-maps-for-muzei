@@ -68,7 +68,7 @@ subprojects {
 
         buildTools = "25.0.2"
         compileAndTargetSdkLevel = 25
-        minSdkLevel = 17
+        minSdkLevel = 19
         supportLibraryVersion = '25.1.1'
         daggerVersion = '2.9'
     }
